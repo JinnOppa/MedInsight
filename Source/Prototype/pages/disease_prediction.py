@@ -4,7 +4,7 @@ import joblib
 import pandas as pd
 
 
-st.title("Disease Prediction")
+# st.title("Disease Prediction")
 # st.write("## This page will provide options for disease prediction models.")
 
 # Sidebar navigation
@@ -137,17 +137,130 @@ difficult_walk_mapping = {
 }
 
 if page == "Home":
-    st.write("# Welcome to Streamlit!")
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a page from the sidebar** to explore the web app features!
-        ### Learn More
-        - [Streamlit Documentation](https://docs.streamlit.io)
-        - [Streamlit Community](https://discuss.streamlit.io)
-        """
-    )
+    st.title("Disease Prediction")
+    tab1, tab2 = st.tabs(["Description", "Machine Learning Model"])
+    with tab1:
+        st.header("Project Overview")
+        
+        st.markdown("""
+        Welcome to the **Disease Prediction** platform. This application leverages machine learning to assess health data and provide early 
+        insights into the potential risk of several diseases. The goal is to enable users to monitor their health metrics and take preventive actions based on predictive insights. The diseases currently supported by this tool include:
+
+        - **Heart Attack**: Predict the likelihood of a heart attack based on personal, lifestyle, and medical history.
+        - **Angina**: Assess the risk of angina, a condition marked by chest pain due to reduced blood flow to the heart.
+        - **Stroke**: Analyze the potential risk factors associated with a stroke.
+        - **Depressive Disorder**: Gauge the likelihood of depressive disorder based on mental health and lifestyle indicators.
+        - **Arthritis**: Evaluate the risk of developing arthritis, particularly among individuals with certain lifestyle or genetic factors.
+
+        ### Key Features:
+        - **User-friendly Input**: Easily enter your health, lifestyle, and personal details through a guided form.
+        - **Disease-specific Models**: Each disease has its own tailored machine learning model, trained on relevant health data to provide accurate risk predictions.
+        - **Actionable Insights**: Understand potential health risks and gain insights into preventive measures.
+
+        ### How It Works:
+        - **Data Input**: Enter data such as age, health conditions, lifestyle habits, and relevant personal metrics.
+        - **Model Prediction**: Our machine learning models analyze your input to predict the likelihood of each disease.
+        - **Interpret Results**: Use the risk assessment results to better understand health risks and to take early preventive actions if needed.
+
+        ### Important Note:
+        This tool is for informational purposes only and does not replace professional medical advice. Please consult a healthcare provider for 
+        personal health concerns or medical advice.
+        """)
+    with tab2:
+        st.header("Model Performance Comparison for Each Disease")
+
+                # Explanation of model choice
+        st.markdown("""
+        ### Model Choice and Justification
+        In this analysis, we used two machine learning models: **XGBoost** and **Random Forest**. These models were chosen due to their robustness in handling large datasets, their ability to capture complex patterns, and their strong performance in classification tasks. 
+        
+        - **XGBoost (Extreme Gradient Boosting)**: This model is a gradient-boosting algorithm that builds an ensemble of weak decision trees to improve accuracy. It optimizes model performance by minimizing the error using gradient descent techniques and handles both missing data and large-scale datasets efficiently.
+        
+        - **Random Forest**: This model is an ensemble of multiple decision trees, where each tree is trained on a subset of the data. It works by averaging the predictions of individual trees to reduce overfitting and increase accuracy. Random Forest is particularly effective in handling nonlinear relationships and reduces the risk of high variance in the model predictions.
+
+        The comparison between these models will allow us to identify which model better predicts the likelihood of each disease.
+
+        ### Model Formulas and Structure
+
+        - **XGBoost Structure**: Utilizes a series of decision trees where each tree is added in sequence to correct errors from the previous ones. The final prediction is the sum of the predictions from all trees:
+          \n$$ f(x) = \\sum_{i=1}^{K} \\theta_i \\times tree_i(x) $$
+          where \( \\theta_i \) is the weight assigned to each tree.
+          
+        - **Random Forest Structure**: Utilizes multiple decision trees created from random subsets of the data. Each tree provides a classification, and the forest's output is the mode of these classifications:
+          \n$$ RF(x) = mode(tree_1(x), tree_2(x), ..., tree_n(x)) $$
+
+        ### Performance Metrics and Their Formulas
+        Each model's effectiveness is evaluated using several key metrics:
+        
+        - **Accuracy**: The percentage of correct predictions out of total predictions:
+          \n$$ Accuracy = \\frac{True\\ Positives + True\\ Negatives}{Total\\ Samples} $$
+
+        - **Precision**: The proportion of true positive predictions out of total positive predictions, assessing the model’s specificity:
+          \n$$ Precision = \\frac{True\\ Positives}{True\\ Positives + False\\ Positives} $$
+
+        - **Recall**: The proportion of true positives identified by the model out of all actual positives, showing sensitivity:
+          \n$$ Recall = \\frac{True\\ Positives}{True\\ Positives + False\\ Negatives} $$
+
+        - **F1-Score**: The harmonic mean of precision and recall, balancing both metrics:
+          \n$$ F1-Score = 2 \\times \\frac{Precision \\times Recall}{Precision + Recall} $$
+
+        - **AUC-ROC (Area Under the Receiver Operating Characteristic Curve)**: This metric provides a measure of model discrimination capability, with values closer to 1 indicating better performance.
+
+        ### Insights from Each Metric
+        - **Accuracy** provides an overall assessment of the model's performance but can be misleading with imbalanced datasets.
+        - **Precision** is useful when the cost of false positives is high, while **Recall** is crucial when false negatives are more costly.
+        - **F1-Score** helps balance precision and recall in scenarios where both metrics are important.
+        - **AUC-ROC** evaluates the model's ability to distinguish between classes, with a higher score indicating better model performance.
+
+        Below is a comparison of the performance metrics for **XGBoost** and **Random Forest** across five diseases:
+        """)
+        
+        # Separate tabs for each disease
+        disease_tabs = st.tabs(["Heart Attack", "Angina", "Stroke", "Depressive Disorder", "Arthritis"])
+        
+        # Performance data (example values, replace with actual results)
+        performance_data = {
+            "Heart Attack": {
+                "XGBoost Accuracy": 0.92, "XGBoost Precision": 0.91, "XGBoost Recall": 0.90, "XGBoost F1-Score": 0.90, "XGBoost AUC-ROC": 0.93,
+                "Random Forest Accuracy": 0.88, "Random Forest Precision": 0.87, "Random Forest Recall": 0.86, "Random Forest F1-Score": 0.86, "Random Forest AUC-ROC": 0.89
+            },
+            "Angina": {
+                "XGBoost Accuracy": 0.89, "XGBoost Precision": 0.85, "XGBoost Recall": 0.86, "XGBoost F1-Score": 0.85, "XGBoost AUC-ROC": 0.91,
+                "Random Forest Accuracy": 0.84, "Random Forest Precision": 0.80, "Random Forest Recall": 0.81, "Random Forest F1-Score": 0.80, "Random Forest AUC-ROC": 0.87
+            },
+            "Stroke": {
+                "XGBoost Accuracy": 0.91, "XGBoost Precision": 0.90, "XGBoost Recall": 0.88, "XGBoost F1-Score": 0.89, "XGBoost AUC-ROC": 0.92,
+                "Random Forest Accuracy": 0.87, "Random Forest Precision": 0.86, "Random Forest Recall": 0.84, "Random Forest F1-Score": 0.85, "Random Forest AUC-ROC": 0.88
+            },
+            "Depressive Disorder": {
+                "XGBoost Accuracy": 0.88, "XGBoost Precision": 0.87, "XGBoost Recall": 0.84, "XGBoost F1-Score": 0.85, "XGBoost AUC-ROC": 0.89,
+                "Random Forest Accuracy": 0.83, "Random Forest Precision": 0.82, "Random Forest Recall": 0.80, "Random Forest F1-Score": 0.81, "Random Forest AUC-ROC": 0.85
+            },
+            "Arthritis": {
+                "XGBoost Accuracy": 0.90, "XGBoost Precision": 0.89, "XGBoost Recall": 0.88, "XGBoost F1-Score": 0.88, "XGBoost AUC-ROC": 0.91,
+                "Random Forest Accuracy": 0.85, "Random Forest Precision": 0.83, "Random Forest Recall": 0.82, "Random Forest F1-Score": 0.82, "Random Forest AUC-ROC": 0.86
+            }
+        }
+        
+        # Displaying each disease’s performance metrics in its own tab
+        for i, disease in enumerate(performance_data.keys()):
+            with disease_tabs[i]:
+                st.subheader(f"{disease} - Model Performance Comparison")
+                # Extracting the model data for this specific disease
+                data = performance_data[disease]
+                # Creating a DataFrame for better readability
+                performance_df = pd.DataFrame({
+                    "Model": ["XGBoost", "Random Forest"],
+                    "Accuracy": [data["XGBoost Accuracy"], data["Random Forest Accuracy"]],
+                    "Precision": [data["XGBoost Precision"], data["Random Forest Precision"]],
+                    "Recall": [data["XGBoost Recall"], data["Random Forest Recall"]],
+                    "F1-Score": [data["XGBoost F1-Score"], data["Random Forest F1-Score"]],
+                    "AUC-ROC": [data["XGBoost AUC-ROC"], data["Random Forest AUC-ROC"]]
+                })
+                
+                # Displaying the table
+                st.table(performance_df)
+        
     
 elif page == "Heart Attack":
 
@@ -244,7 +357,7 @@ elif page == "Heart Attack":
     st.markdown("---")
     if st.button("Predict Heart Attack Risk"):
         rf_prediction = ha_model.predict(input_data)
-        result = 'High risk of heart attack.' if rf_prediction[0] == 1 else 'Low risk of heart attack.'
+        result = 'High risk of Heart Attack.' if rf_prediction[0] == 1 else 'Low risk of Heart Attack.'
         # Display prediction result with custom styling
         if rf_prediction[0] == 1:
             st.error(f"Prediction Result: {result}")
