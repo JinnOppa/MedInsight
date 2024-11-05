@@ -359,7 +359,7 @@ elif page == "Stroke":
     
     # Load the best Random Forest model
     # stroke_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_rf_stroke.pkl')
-    stroke_model = joblib.load('Source/Prototype/disease_rf_stroke.pkl')
+    stroke_model = joblib.load('Source/Prototype/disease_xgb_stroke.pkl')
 
     # Page title and description
     st.title("Stroke Risk Prediction")
