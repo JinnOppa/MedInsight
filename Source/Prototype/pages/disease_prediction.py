@@ -8,7 +8,7 @@ import pandas as pd
 # st.write("## This page will provide options for disease prediction models.")
 
 # Sidebar navigation
-page = st.sidebar.radio("Go to:", ("Home", "Heart Attack", "Angina", "Stroke", "Depressive Disorder", "Arthritis"))
+page = st.sidebar.radio("Go to:", ("Home", "Heart Attack", "Angina", "Stroke", "Depressive Disorder", "Arthritis", "Skin Cancer"))
 
 # Mapping the categorical inputs to numerical values
 general_health_mapping = {
@@ -134,6 +134,19 @@ difficult_deaf_hearing_mapping = {
 difficult_walk_mapping = {
     'False': 0,
     'True': 1
+}
+
+skin_type_mapping = {
+    'Type I-II' : 0, 
+    'Type IV-VI': 1, 
+    'Type III': 2
+}
+sunlight_exposure_type_mapping = {
+    'High': 0, 
+    'Low': 1, 
+    'Extreme': 2, 
+    'Very High': 3, 
+    'Moderate': 4
 }
 
 if page == "Home":
@@ -370,11 +383,7 @@ if page == "Home":
                 st.write(f"**Best Model for {disease} Prediction:** {best_model}")
 
         
-    
 elif page == "Heart Attack":
-
-    # Load the model
-    # ha_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_rf_heart_attack.pkl')
     ha_model = joblib.load('Source/Prototype/disease_rf_heart_attack.pkl')
 
     # Page title and description
@@ -474,9 +483,6 @@ elif page == "Heart Attack":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Angina":
-    
-    # Load the model
-    # angina_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_xgb_angina.pkl')
     angina_model = joblib.load('Source/Prototype/disease_xgb_angina.pkl')
 
     # Page title and description
@@ -578,9 +584,6 @@ elif page == "Angina":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Stroke":
-    
-    # Load the best Random Forest model
-    # stroke_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_rf_stroke.pkl')
     stroke_model = joblib.load('Source/Prototype/disease_xgb_stroke.pkl')
 
     # Page title and description
@@ -676,8 +679,6 @@ elif page == "Stroke":
             st.success(f"Prediction Result: {result}")
             
 elif page == "Depressive Disorder":
-    # Load the best Random Forest model
-    # dd_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_xgb_depressive_disorder.pkl')
     dd_model = joblib.load('Source/Prototype/disease_xgb_depressive_disorder.pkl')
     
     # Page title and description
@@ -777,8 +778,6 @@ elif page == "Depressive Disorder":
             st.success(f"Prediction Result: {result}")
                      
 elif page == "Arthritis":
-    # Load the best Random Forest model
-    # arthritis_model = joblib.load(r'C:\Users\user\OneDrive\Documents\GitHub\TSDN-BoyWithLuv\Source\Prototype\disease_xgb_arthritis.pkl')
     arthritis_model = joblib.load('Source/Prototype/disease_xgb_arthritis.pkl')
 
     
@@ -859,6 +858,93 @@ elif page == "Arthritis":
     if st.button("Predict Arthritis Risk"):
         rf_prediction = arthritis_model.predict(input_data)
         result = 'High risk of having Arthritis.' if rf_prediction[0] == 1 else 'Low risk of having Arthritis.'
+        # Display prediction result with custom styling
+        if rf_prediction[0] == 1:
+            st.error(f"Prediction Result: {result}")
+        else:
+            st.success(f"Prediction Result: {result}")
+            
+elif page == "Skin Cancer":
+    sc_model = joblib.load('Source/Prototype/disease_xgb_skin_cancer.pkl')
+    
+    # Page title and description
+    st.title("Skin Cancer Risk Prediction")
+    st.write("Enter the following information to predict the risk of Skin Cancer.")
+
+    # Collapsible input sections
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        age_category = st.selectbox('Age Category', [
+            'Age 18 to 24', 'Age 25 to 29', 'Age 30 to 34', 
+            'Age 35 to 39', 'Age 40 to 44', 'Age 45 to 49', 
+            'Age 50 to 54', 'Age 55 to 59', 'Age 60 to 64', 
+            'Age 65 to 69', 'Age 70 to 74', 'Age 75 to 79', 
+            'Age 80 or older'
+        ])
+        sex = st.selectbox('Sex', ['Male', 'Female'])
+        skin = st.selectbox('Skin Type', ['Type I-II', 'Type IV-VI', 'Type III'])
+        height = st.number_input('Height (meters)', min_value=0.0, max_value=2.5, value=1.65)
+        weight = st.number_input('Weight (kg)', min_value=0.0, max_value=300.0, value=65.0)
+        sunlight_exposure = st.selectbox('Sunlight Exposure', ['High', 'Low', 'Extreme', 'Very High', 'Moderate'])
+        temperature_exposure = st.number_input('Average Temperature City (°C)', min_value = -20.0 ,max_value= 56.7, value= 25.0)
+    
+    st.subheader("Health & Lifestyle")
+    with st.expander("Enter Health and Lifestyle Details"):
+        general_health = st.selectbox('General Health', ['Poor', 'Fair', 'Good', 'Very good', 'Excellent'])
+        smoker_status = st.selectbox('Smoker Status', [
+            'Never smoked', 'Former smoker', 
+            'Current smoker - now smokes some days', 
+            'Current smoker - now smokes every day'
+        ])
+        alcohol_drinkers = st.number_input('Alcohol Consumption (drinks per week)', min_value=0, max_value=50, value=0)
+        e_cigarette_usage = st.selectbox('E-Cigarette Usage', [
+            'Never used e-cigarettes in my entire life', 
+            'Not at all (right now)', 'Use them some days', 
+            'Use them every day'
+        ])
+        
+    st.subheader("Medical History")
+    with st.expander("Enter Medical History"):
+        had_copd = st.selectbox('Had COPD', ['False','True'])
+    
+    st.subheader("Screening and Vaccination")
+    with st.expander("Enter Screening and Vaccination Details"):    
+        difficulty_errands = st.selectbox('DifficultyErrands', ['False','True'])
+        difficulty_dressing_bathing = st.selectbox('DifficultyDressingBathing', ['False','True'])
+        
+    input_data = pd.DataFrame({
+        'AgeCategory': [age_category],
+        'Sex': [sex],
+        'skin_type': [skin],
+        'HeightInMeters':[height],
+        'WeightInKilograms':[weight],
+        'GeneralHealth': [general_health],
+        'SmokerStatus': [smoker_status],
+        'AlcoholDrinkers': [alcohol_drinkers],
+        'ECigaretteUsage': [e_cigarette_usage],
+        'HadCOPD': [had_copd],
+        'DifficultyErrands': [difficulty_errands],
+        'DifficultyDressingBathing': [difficulty_dressing_bathing],
+        'sunlight_exposure_category': [sunlight_exposure],
+        'average_environment_temperature': [temperature_exposure]
+    })
+    
+    input_data['AgeCategory'] = input_data['AgeCategory'].map(age_category_mapping)
+    input_data['Sex'] = input_data['Sex'].map(sex_mapping)
+    input_data['GeneralHealth'] = input_data['GeneralHealth'].map(general_health_mapping)
+    input_data['SmokerStatus'] = input_data['SmokerStatus'].map(smoker_status_mapping)
+    input_data['ECigaretteUsage'] = input_data['ECigaretteUsage'].map(e_cigarette_usage_mapping)
+    input_data['HadCOPD'] = input_data['HadCOPD'].map(copd_mapping)
+    input_data['DifficultyErrands'] = input_data['DifficultyErrands'].map(difficult_errand_mapping)
+    input_data['DifficultyDressingBathing'] = input_data['DifficultyDressingBathing'].map(difficult_dressing_mapping)
+    input_data['skin_type'] = input_data['skin_type'].map(skin_type_mapping)
+    input_data['sunlight_exposure_category'] = input_data['sunlight_exposure_category'].map(sunlight_exposure_type_mapping)
+    
+    # Predict button
+    st.markdown("---")
+    if st.button("Predict Skin Cancer Risk"):
+        rf_prediction = sc_model.predict(input_data)
+        result = 'High risk of having Skin Cancer.' if rf_prediction[0] == 1 else 'Low risk of having Skin Cancer.'
         # Display prediction result with custom styling
         if rf_prediction[0] == 1:
             st.error(f"Prediction Result: {result}")
