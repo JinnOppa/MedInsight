@@ -180,6 +180,7 @@ if page == "Home":
         - **Stroke**: Analyze the potential risk factors associated with a stroke, including lifestyle habits and pre-existing conditions.
         - **Depressive Disorder**: Gauge the likelihood of depressive disorder based on mental health indicators and lifestyle choices.
         - **Arthritis**: Evaluate the risk of developing arthritis, particularly among individuals with specific lifestyle or genetic predispositions.
+        - **Skin Cancer**: Assess the risk of skin cancer based on personal, lifestyle, and environmental factors, including skin type, exposure to sunlight, and medical history.
         """)
         st.markdown("---")
         
@@ -203,21 +204,6 @@ if page == "Home":
             2. **Model Prediction**: The application employs advanced machine learning models to analyze the input data and predict the likelihood of each disease. These models utilize extensive datasets to ensure accurate predictions.
             3. **Interpret Results**: Users receive a clear assessment of their health risks, which they can use to make informed decisions about their lifestyle and health management.
             """)
-        # st.write("### Key Features:")
-        # st.write("""
-        # - **User-friendly Input**: Our guided form allows users to easily enter their health, lifestyle, and personal details, making the process straightforward even for those without a medical background.
-        # - **Disease-specific Models**: Each disease has its own tailored machine learning model, trained on relevant health data to provide accurate risk predictions. This specialization enhances the reliability of the insights.
-        # - **Actionable Insights**: The platform provides clear and understandable risk assessments, enabling users to recognize potential health risks and to take informed preventive measures.
-        # - **Educational Resources**: Users can access information about the diseases, risk factors, and lifestyle changes that may help reduce their risk, promoting a better understanding of their health.
-        # """)
-
-        # st.write("### How It Works:")
-        # st.write("""
-        # 1. **Data Input**: Users enter relevant data, including age, health conditions, lifestyle habits, and personal metrics, through an easy-to-navigate input form.
-        # 2. **Model Prediction**: The application employs advanced machine learning models to analyze the input data and predict the likelihood of each disease. These models utilize extensive datasets to ensure accurate predictions.
-        # 3. **Interpret Results**: Users receive a clear assessment of their health risks, which they can use to make informed decisions about their lifestyle and health management.
-        # 4. **Personalized Recommendations**: Based on the assessment results, users may receive suggestions for lifestyle modifications or healthcare follow-ups, further promoting proactive health management.
-        # """)
         
         st.markdown("---")
         st.write("### Important Note:")
@@ -226,31 +212,6 @@ if page == "Home":
         We strongly encourage users to consult with a qualified healthcare provider for any personal health concerns or medical advice. 
         Understanding your health risks is essential, but it is equally important to have professional guidance tailored to your unique health situation.
         """)
-        
-        # st.markdown("""
-        # Welcome to the **Disease Prediction** platform. This application leverages machine learning to assess health data and provide early 
-        # insights into the potential risk of several diseases. The goal is to enable users to monitor their health metrics and take preventive actions based on predictive insights. The diseases currently supported by this tool include:
-
-        # - **Heart Attack**: Predict the likelihood of a heart attack based on personal, lifestyle, and medical history.
-        # - **Angina**: Assess the risk of angina, a condition marked by chest pain due to reduced blood flow to the heart.
-        # - **Stroke**: Analyze the potential risk factors associated with a stroke.
-        # - **Depressive Disorder**: Gauge the likelihood of depressive disorder based on mental health and lifestyle indicators.
-        # - **Arthritis**: Evaluate the risk of developing arthritis, particularly among individuals with certain lifestyle or genetic factors.
-
-        # ### Key Features:
-        # - **User-friendly Input**: Easily enter your health, lifestyle, and personal details through a guided form.
-        # - **Disease-specific Models**: Each disease has its own tailored machine learning model, trained on relevant health data to provide accurate risk predictions.
-        # - **Actionable Insights**: Understand potential health risks and gain insights into preventive measures.
-
-        # ### How It Works:
-        # - **Data Input**: Enter data such as age, health conditions, lifestyle habits, and relevant personal metrics.
-        # - **Model Prediction**: Our machine learning models analyze your input to predict the likelihood of each disease.
-        # - **Interpret Results**: Use the risk assessment results to better understand health risks and to take early preventive actions if needed.
-
-        # ### Important Note:
-        # This tool is for informational purposes only and does not replace professional medical advice. Please consult a healthcare provider for 
-        # personal health concerns or medical advice.
-        # """)
         
     with tab2:
         st.header("Model Performance Comparison for Each Disease")
@@ -329,7 +290,7 @@ if page == "Home":
         st.write(" ")
         st.write("### Model's Metric Performance Comparison")
         # Separate tabs for each disease
-        disease_tabs = st.tabs(["Heart Attack", "Angina", "Stroke", "Depressive Disorder", "Arthritis"])
+        disease_tabs = st.tabs(["Heart Attack", "Angina", "Stroke", "Depressive Disorder", "Arthritis", "Skin Cancer"])
         
         # Performance data (example values, replace with actual results)
         performance_data = {
@@ -352,6 +313,10 @@ if page == "Home":
             "Arthritis": {
                 "XGBoost Accuracy": 0.7192471159684275, "XGBoost Precision": 0.72, "XGBoost Recall": 0.72, "XGBoost F1-Score": 0.72, "XGBoost AUC-ROC": 0.7965055602774131,
                 "Random Forest Accuracy": 0.7163023679417122, "Random Forest Precision": 0.72, "Random Forest Recall": 0.72, "Random Forest F1-Score": 0.72, "Random Forest AUC-ROC": 0.7946057947266688
+            },
+            "Skin Cancer": {
+                "XGBoost Accuracy": 0.7217627453400814, "XGBoost Precision": 0.73, "XGBoost Recall": 0.72, "XGBoost F1-Score": 0.72, "XGBoost AUC-ROC": 0.7930140012150367,
+                "Random Forest Accuracy": 0.7201580051845451, "Random Forest Precision": 0.74, "Random Forest Recall": 0.72, "Random Forest F1-Score": 0.72, "Random Forest AUC-ROC": 0.7910663936451278
             }
         }
         
@@ -882,7 +847,7 @@ elif page == "Skin Cancer":
             'Age 80 or older'
         ])
         sex = st.selectbox('Sex', ['Male', 'Female'])
-        skin = st.selectbox('Skin Type', ['Type I-II', 'Type IV-VI', 'Type III'])
+        skin = st.selectbox('Skin Type', ['Type I-II', 'Type III', 'Type IV-VI'])
         height = st.number_input('Height (meters)', min_value=0.0, max_value=2.5, value=1.65)
         weight = st.number_input('Weight (kg)', min_value=0.0, max_value=300.0, value=65.0)
         sunlight_exposure = st.selectbox('Sunlight Exposure', ['High', 'Low', 'Extreme', 'Very High', 'Moderate'])
