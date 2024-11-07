@@ -1,67 +1,68 @@
 import streamlit as st
 import pandas as pd
 import pickle
-from datetime import timedelta
 import numpy as np
+from datetime import datetime, timedelta
 
-# Load saved models for each admission type
-with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\xgb_elective.pkl", "rb") as file:
+# Load the saved model
+with open('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\draft2_elective_rf.pkl', 'rb') as file:
     elective_model = pickle.load(file)
-with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\xgb_emergency.pkl", "rb") as file:
-    emergency_model = pickle.load(file)
-with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\xgb_urgent.pkl", "rb") as file:
-    urgent_model = pickle.load(file)
 
-# Function to get column names based on the admission type
-def get_feature_columns(admission_type):
-    return [
-        f"('{admission_type}', 'Female')", 
-        f"('{admission_type}', 'Male')", 
-        f"{admission_type}_Lag_1", 
-        f"{admission_type}_Lag_2", 
-        f"{admission_type}_Lag_3", 
-        "month", "day", "year", "quarter", "dayofweek", "dayofyear"
-    ]
+# Function to make predictions
+def predict_admissions(days_ahead, model):
+    # Initial base features (user can adjust these or get them from other sources)
+    base_features = {
+        'Female': 50,  # Placeholder values, update as needed
+        'Male': 50,
+        'lag_1': 95,
+        'lag_7': 80,
+        'lag_30': 70,
+        # 'day': datetime.now().day,
+        # 'month': datetime.now().month,
+        # 'year': datetime.now().year,
+    }
 
-# Set up Streamlit interface
-st.title("Hospital Admission Prediction by Type")
-st.write("Select an admission type to predict future admissions.")
+    # Compute rolling mean for 7 days (assuming it's based on `lag_1`, `lag_7`, `lag_30`)
+    # If you have actual past data, use it to calculate rolling mean. For now, we can set it as a placeholder
+    base_features['rolling_mean_7'] = np.mean([base_features['lag_1'], base_features['lag_7'], base_features['lag_30']])  # Adjust logic based on actual use
 
-# Dropdown to select the admission type
-admission_type = st.selectbox("Choose Admission Type to Predict:", ["Elective", "Emergency", "Urgent"])
+    # Construct a DataFrame for input
+    input_data = pd.DataFrame([base_features])
 
-# Load the appropriate model
-model = {
-    "Elective": elective_model,
-    "Emergency": emergency_model,
-    "Urgent": urgent_model
-}[admission_type]
+    # Adjust the number of days to predict
+    future_predictions = []
+    for _ in range(days_ahead):
+        pred = model.predict(input_data)
+        future_predictions.append(pred[0])  # Assumes a single prediction for each day
 
-# Input for number of days to predict
-days_to_predict = st.number_input("Enter the number of days to predict:", min_value=1, max_value=30, step=1)
+        # Update the features for the next day (based on the most recent prediction)
+        input_data['lag_1'] = pred[0]
+        input_data['lag_7'] = input_data['lag_1']  # Example update, use actual logic to calculate this
+        input_data['lag_30'] = input_data['lag_1']
+        input_data['rolling_mean_7'] = np.mean([input_data['lag_1'], input_data['lag_7'], input_data['lag_30']])
+        # input_data['day'] = (datetime.now() + timedelta(days=_ + 1)).day
+        # input_data['month'] = (datetime.now() + timedelta(days=_ + 1)).month
+        # input_data['year'] = (datetime.now() + timedelta(days=_ + 1)).year
 
-# Button to initiate predictions
-if st.button("Predict"):
-    # Initialize dummy data with the correct column names for the selected admission type
-    feature_columns = get_feature_columns(admission_type)
-    data = pd.DataFrame(np.zeros((1, len(feature_columns))), columns=feature_columns)
+    return future_predictions
+
+# Streamlit UI
+st.title("Elective Admission Prediction")
+
+# Input: Number of days to predict
+days_ahead = st.slider('Select number of days to predict:', 1, 30, 7)
+
+# Button to make prediction
+if st.button('Predict Admissions'):
+    predictions = predict_admissions(days_ahead, elective_model)
     
-    # Placeholder for predictions
-    predictions = []
+    # Display the predictions
+    prediction_dates = [(datetime.now() + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(days_ahead)]
     
-    # Generate predictions for specified days
-    for day in range(days_to_predict):
-        # Predict next day's admission count
-        prediction = model.predict(data)[0]
-        predictions.append(prediction)
-        
-        # Update lag values and shift features for the next prediction
-        data[f"{admission_type}_Lag_3"] = data[f"{admission_type}_Lag_2"]
-        data[f"{admission_type}_Lag_2"] = data[f"{admission_type}_Lag_1"]
-        data[f"{admission_type}_Lag_1"] = prediction
-        
-        # Increment date features if necessary (e.g., dayofweek, dayofyear, etc.)
+    st.write(f"Predictions for the next {days_ahead} days:")
+    prediction_df = pd.DataFrame({
+        'Date': prediction_dates,
+        'Predicted Elective Admissions': predictions
+    })
     
-    # Display predictions as a line chart
-    st.write(f"Predicted {admission_type} admissions for the next {days_to_predict} days:")
-    st.line_chart(predictions)
+    st.write(prediction_df)
