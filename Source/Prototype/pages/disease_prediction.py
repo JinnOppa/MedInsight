@@ -349,8 +349,8 @@ if page == "Home":
 
         
 elif page == "Heart Attack":
-    ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_rf_heart_attack.pkl')
-    #ha_model = joblib.load('Source/Prototype/disease_rf_heart_attack.pkl')
+    # ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_rf_heart_attack.pkl')
+    ha_model = joblib.load('Source/Prototype/disease_rf_heart_attack.pkl')
 
     # Page title and description
     st.title("Heart Attack Risk Prediction")
@@ -449,8 +449,8 @@ elif page == "Heart Attack":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Angina":
-    angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_xgb_angina.pkl')
-    #angina_model = joblib.load('Source/Prototype/disease_xgb_angina.pkl')
+    # angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_xgb_angina.pkl')
+    angina_model = joblib.load('Source/Prototype/disease_xgb_angina.pkl')
     # Page title and description
     st.title("Angina Risk Prediction")
     st.write("Enter the following information to predict the risk of Angina.")
