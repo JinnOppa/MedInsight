@@ -38,20 +38,24 @@ with col2:
         unsafe_allow_html=True
     )
 
-st.header('Aim of The Project')
-st.write('The aim of this project is to develop predictive models using data analytics and data science techniques to forecast hospital-related issues, including predicting the number of patients requiring hospital stays, estimating survival rates, and predicting diseases based on user-inputted patient details.')
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.header('Aim')
+    st.write('The aim of this project is to develop predictive models using data analytics and data science techniques to forecast hospital-related issues, including predicting the number of patients requiring hospital stays, estimating survival rates, and predicting diseases based on user-inputted patient details.')
 
-st.header('Objectives')
-st.write("""
-1.**Data Collection and Preprocessing:** Gather relevant hospital datasets that include patient demographics, medical conditions, test results, admission types, and historical stay durations.
-Clean and preprocess the data by handling missing values, outliers, and categorizing features (e.g., age, gender, medical conditions, etc.).\n
-2.**Predictive Modeling:** Implement machine learning algorithms (e.g., XGBoost and Random Forest) and create models to predict **diseases** based on patient details such as symptoms, medical history, and test results,the number of **hospital stays** for future patients based on several features, as well as the **survival rates** of patients (high or low) based on several features available.\n
-3.**Model Evaluation:** Evaluate the performance of the predictive models using appropriate metrics such as accuracy, precision, recall, F1-score, and AUC for classification models, and RMSE or MAE for regression models and fine-tune the models using hyperparameter optimization techniques to improve model performance and prediction accuracy.\n
-4.**Deployment:** Deploy the trained models into a user-friendly application (e.g., Streamlit app) to allow healthcare providers and users to input new data and receive predictions regarding hospital stay requirements, patient survival probabilities, and potential diseases.
-""")
+with col2:
+    st.header('Objectives')
+    st.write("""
+    1.**Data Collection and Preprocessing:** Gather relevant hospital datasets that include patient demographics, medical conditions, test results, admission types, and historical stay durations.
+    Clean and preprocess the data by handling missing values, outliers, and categorizing features (e.g., age, gender, medical conditions, etc.).\n
+    2.**Predictive Modeling:** Implement machine learning algorithms (e.g., XGBoost and Random Forest) and create models to predict **diseases** based on patient details such as symptoms, medical history, and test results,the number of **hospital stays** for future patients based on several features, as well as the **survival rates** of patients (high or low) based on several features available.\n
+    3.**Model Evaluation:** Evaluate the performance of the predictive models using appropriate metrics such as accuracy, precision, recall, F1-score, and AUC for classification models, and RMSE or MAE for regression models and fine-tune the models using hyperparameter optimization techniques to improve model performance and prediction accuracy.\n
+    4.**Deployment:** Deploy the trained models into a user-friendly application (e.g., Streamlit app) to allow healthcare providers and users to input new data and receive predictions regarding hospital stay requirements, patient survival probabilities, and potential diseases.
+    """)
 
-st.header('Goal of The Project')
-st.write("The goal is to provide healthcare professionals and users with reliable, data-driven tools to predict hospital stays, patient survival rates, and potential diseases. This project aims to assist in better resource allocation, improve patient care, enable early disease detection, and enhance decision-making processes in hospital management. Ultimately, this project seeks to contribute to reducing hospital overcrowding, improving patient outcomes, and supporting proactive health management.")
+with col3:
+    st.header('Goal')
+    st.write("The goal is to provide healthcare professionals and users with reliable, data-driven tools to predict hospital stays, patient survival rates, and potential diseases. This project aims to assist in better resource allocation, improve patient care, enable early disease detection, and enhance decision-making processes in hospital management. Ultimately, this project seeks to contribute to reducing hospital overcrowding, improving patient outcomes, and supporting proactive health management.")
 
 
 # st.sidebar.success("Select a page from the sidebar.")
