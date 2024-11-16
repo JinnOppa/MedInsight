@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 import joblib
 
 # Load the saved model
-with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\New\\xgb_survival_rate.pkl", "rb") as file:  # Replace 'saved_model.pkl' with your actual model filename
+with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\survival_rate\\xgb_survival_rate.pkl", "rb") as file:  # Replace 'saved_model.pkl' with your actual model filename
     model = pickle.load(file)
 
 page = st.sidebar.radio("Go to:", ("Home", "Survival Rate","Surgery Risk","Hospital Stay Duration","Total Hospitalization Cost"))
@@ -213,7 +213,7 @@ if page == "Home":
 
         #    Displaying in Streamlit
         st.table(performance_regression_df)
-        st.write("**Best Model for Survival Rate Prediction:** XGBoost")
+        st.write("**Best Model for Prediction:** XGBoost")
 
 elif page == "Survival Rate":
     # Title and description

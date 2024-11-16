@@ -349,8 +349,9 @@ if page == "Home":
 
         
 elif page == "Heart Attack":
-    # ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_rf_heart_attack.pkl')
-    ha_model = joblib.load('Source/Prototype/disease/disease_rf_heart_attack.pkl')
+    #ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_rf_heart_attack.pkl')
+    #ha_model = joblib.load('Source/Prototype/disease/disease_rf_heart_attack.pkl')
+    ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_rf_heart_attack.pkl')
     # Page title and description
     st.title("Heart Attack Risk Prediction")
     st.write("Enter the following information to predict the risk of a heart attack.")
@@ -448,8 +449,8 @@ elif page == "Heart Attack":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Angina":
-    # angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_xgb_angina.pkl')
-    angina_model = joblib.load('Source/Prototype/disease/disease_xgb_angina.pkl')
+    angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_angina.pkl')
+    #angina_model = joblib.load('Source/Prototype/disease/disease_xgb_angina.pkl')
     # Page title and description
     st.title("Angina Risk Prediction")
     st.write("Enter the following information to predict the risk of Angina.")
@@ -549,8 +550,8 @@ elif page == "Angina":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Stroke":
-    stroke_model = joblib.load('Source/Prototype/disease/disease_xgb_stroke.pkl')
-
+    #stroke_model = joblib.load('Source/Prototype/disease/disease_xgb_stroke.pkl')
+    stroke_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_stroke.pkl')
     # Page title and description
     st.title("Stroke Risk Prediction")
     st.write("Enter the following information to predict the risk of Stroke.")
@@ -644,8 +645,8 @@ elif page == "Stroke":
             st.success(f"Prediction Result: {result}")
             
 elif page == "Depressive Disorder":
-    dd_model = joblib.load('Source/Prototype/disease/disease_xgb_depressive_disorder.pkl')
-    
+    #dd_model = joblib.load('Source/Prototype/disease/disease_xgb_depressive_disorder.pkl')
+    dd_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_depressive_disorder.pkl')
     # Page title and description
     st.title("Depressive Disorder Risk Prediction")
     st.write("Enter the following information to predict the risk of Depressive Disorder.")
@@ -743,8 +744,8 @@ elif page == "Depressive Disorder":
             st.success(f"Prediction Result: {result}")
                      
 elif page == "Arthritis":
-    arthritis_model = joblib.load('Source/Prototype/disease/disease_xgb_arthritis.pkl')
-
+    #arthritis_model = joblib.load('Source/Prototype/disease/disease_xgb_arthritis.pkl')
+    arthritis_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_arthritis.pkl')
     
     # Page title and description
     st.title("Arthritis Risk Prediction")
@@ -830,8 +831,8 @@ elif page == "Arthritis":
             st.success(f"Prediction Result: {result}")
             
 elif page == "Skin Cancer":
-    sc_model = joblib.load('Source/Prototype/disease/disease_xgb_skin_cancer.pkl')
-    
+    #sc_model = joblib.load('Source/Prototype/disease/disease_xgb_skin_cancer.pkl')
+    sc_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_skin_cancer.pkl')
     # Page title and description
     st.title("Skin Cancer Risk Prediction")
     st.write("Enter the following information to predict the risk of Skin Cancer.")

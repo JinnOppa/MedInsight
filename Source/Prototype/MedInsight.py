@@ -4,47 +4,21 @@ import streamlit as st
 st.set_page_config(page_title="ML Project Web App", layout="wide")
 
 # Title and introductory text
-st.title("Welcome to MedInsight👋")
-st.header("About Us")
+st.title("MedInsight")
+st.subheader("Predictive Analytics for Disease Risks and Hospitalization Insights")
+st.markdown("---")
+st.header("Introduction")
+st.write("""
+Indonesia, with its rapidly growing population, faces significant challenges in healthcare, particularly due to the increasing burden of non-communicable diseases (NCDs) and rising hospitalization costs. While the government’s Jaminan Kesehatan Nasional (JKN) program has expanded healthcare access, issues such as regional disparities, a shortage of medical professionals, and escalating costs of chronic disease management remain pressing. The prevalence of diseases like heart attack, stroke, angina, depressive disorders, arthritis, and skin cancer significantly contributes to both mortality and healthcare expenditure.
 
-col1, col2 = st.columns(2)
-with col1:
-    st.image("C:\\Users\\Republic Of Gamers\\OneDrive - Asia Pacific University\\Self Photo\\20241113_001141.jpg", use_column_width=True)
-    st.markdown(
-        """
-        <div style='text-align: center;'>
-            <h3>STEVEN YENARDI</h3>
-            <p style='font-size:18px;'>An Indonesian Student Pursuing Bachelor Degree at Asia Pacific University of Technology and Innovation, Malaysia.<br>
-            Majoring in Computer Science Specializing in Data Analytics.</p>
-            <p><a href="https://www.linkedin.com/in/stevenyenardi/" target="_blank" style='color: #0077b5; font-size:16px; text-decoration: none;'>LinkedIn Profile</a></p>
-            <p><a href="https://github.com/stevenyenardi" target="_blank" style='color: purple; font-size:16px; text-decoration: none;'>Github Profile</a></p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+This project utilizes predictive analytics to forecast disease risks and provide insights into hospitalization outcomes. The disease prediction models will focus on conditions such as heart attack, stroke, angina, depressive disorders, arthritis, and skin cancer—all of which are major contributors to mortality and healthcare costs in Indonesia. Additionally, the project will develop models to predict hospitalization insights like survival rates, surgery risks, hospitalization costs, and admission durations. These models will empower healthcare providers to make data-driven decisions, optimize patient care, and enhance hospital resource allocation.
 
-with col2:
-    st.image("C:\\Users\\Republic Of Gamers\\OneDrive - Asia Pacific University\\IMG_0156.jpg", use_column_width=True)
-    st.markdown(
-        """
-        <div style='text-align: center;'>
-            <h3>EUGENE WINATA</h3>
-            <p style='font-size:18px;'>An Indonesian Student Pursuing Bachelor Degree at Asia Pacific University of Technology and Innovation, Malaysia.<br>
-            Majoring in Computer Science Specializing in Data Analytics.</p>
-            <p><a href="https://www.linkedin.com/in/eugene-winata/" target="_blank" style='color: #0077b5; font-size:16px; text-decoration: none;'>LinkedIn Profile</a></p>
-            <p><a href="https://github.com/JinnOppa" target="_blank" style='color: purple; font-size:16px; text-decoration: none;'>Github Profile</a></p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
+By integrating disease prediction and hospitalization insights, the project aims to support Indonesia's healthcare system in addressing these challenges, improving patient outcomes, and enhancing the overall efficiency of healthcare services.""")
 st.markdown("---")
 st.header('Aim')
-st.write('The aim of this project is to develop predictive models using data analytics and data science techniques to forecast hospital-related issues, including predicting the number of patients requiring hospital stays, estimating survival rates, and predicting diseases based on user-inputted patient details.')
+st.write('The aim of this project is to leverage predictive analytics to forecast disease risks and hospitalization outcomes for major non-communicable diseases (NCDs) in Indonesia, including heart attack, stroke, angina, depressive disorders, arthritis, and skin cancer. By developing models to predict disease occurrences, survival rates, surgery risks, hospitalization costs, and admission durations, the project seeks to provide valuable insights that will assist healthcare providers in making data-driven decisions, optimizing patient care, and improving hospital resource allocation. Ultimately, the project aims to contribute to addressing the growing healthcare challenges in Indonesia, enhancing patient outcomes, and improving the efficiency and sustainability of the healthcare system.')
 st.markdown("---")
 st.header('Objectives')
-import streamlit as st
-
 # Displaying numbered points and bullet points in markdown
 st.markdown("""
 1. **Data Collection and Preprocessing**: Gather relevant hospital datasets that include patient demographics, medical conditions, test results, admission types, historical stay durations, surgical risk data, and survival rate information. Clean and preprocess the data by handling missing values, identifying and addressing outliers, and categorizing features (e.g., age, gender, medical conditions, surgical risk factors, and survival status). This will also involve encoding categorical variables and scaling numerical features as necessary.
@@ -72,8 +46,38 @@ st.markdown("""
 st.markdown("---")
 st.header('Goal')
 st.write("The goal is to provide healthcare professionals and users with reliable, data-driven tools to predict hospital stays, patient survival rates, and potential diseases. This project aims to assist in better resource allocation, improve patient care, enable early disease detection, and enhance decision-making processes in hospital management. Ultimately, this project seeks to contribute to reducing hospital overcrowding, improving patient outcomes, and supporting proactive health management.")
+st.markdown("---")
+st.header("About Us")
 
+col1, col2 = st.columns(2)
+with col1:
+     st.markdown(
+        """
+        <div style='text-align: center;'>
+            <h3>STEVEN YENARDI</h3>
+            <p style='font-size:18px;'>An Indonesian Student Pursuing Bachelor Degree at Asia Pacific University of Technology and Innovation, Malaysia.<br>
+            Majoring in Computer Science Specializing in Data Analytics.</p>
+            <p><a href="https://www.linkedin.com/in/stevenyenardi/" target="_blank" style='color: #0077b5; font-size:16px; text-decoration: none;'>LinkedIn Profile</a></p>
+            <p><a href="https://github.com/stevenyenardi" target="_blank" style='color: purple; font-size:16px; text-decoration: none;'>Github Profile</a></p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
+with col2:
+     st.markdown(
+        """
+        <div style='text-align: center;'>
+            <h3>EUGENE WINATA</h3>
+            <p style='font-size:18px;'>An Indonesian Student Pursuing Bachelor Degree at Asia Pacific University of Technology and Innovation, Malaysia.<br>
+            Majoring in Computer Science Specializing in Data Analytics.</p>
+            <p><a href="https://www.linkedin.com/in/eugene-winata/" target="_blank" style='color: #0077b5; font-size:16px; text-decoration: none;'>LinkedIn Profile</a></p>
+            <p><a href="https://github.com/JinnOppa" target="_blank" style='color: purple; font-size:16px; text-decoration: none;'>Github Profile</a></p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    
 # st.sidebar.success("Select a page from the sidebar.")
 
 # # Sidebar navigation
