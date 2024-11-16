@@ -156,14 +156,14 @@ if page == "Home":
         st.header("Project Overview")
         
         st.write("""
-        Welcome to the **Disease Prediction** platform, a comprehensive application designed to leverage the power of machine learning 
-        to assess health data and provide early insights into the potential risk of various diseases. This tool aims to empower users—whether they are health professionals, individuals 
-        monitoring their health, or those with a general interest in disease prevention—to make informed decisions about their health based on predictive insights.
+        Welcome to the Survival Rate platform, a comprehensive application designed to leverage 
+        the power of machine learning to predict survival rates based on various medical and physiological factors. 
+        This platform enables users to input specific details about their health, including vital signs, medical history, and other critical metrics.
         """)
 
         st.write("### Purpose of the Project:")
         st.write("""
-        The primary purpose of this platform is to identify and predict the likelihood of several common diseases, helping users understand their health risks 
+        The primary purpose of this platform is to identify and predict the likelihood of survival rate of a critical patient, helping both professionals and civilian users to understand their health risks 
         through a user-friendly interface. It focuses on several key areas:
         
         - **Awareness**: Increase understanding of personal health risks through data-driven insights.
