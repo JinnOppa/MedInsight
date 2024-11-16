@@ -7,48 +7,57 @@ import numpy as np
 with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\New\\xgb_survival_rate.pkl", "rb") as file:  # Replace 'saved_model.pkl' with your actual model filename
     model = pickle.load(file)
 
-page = st.sidebar.radio("Go to:", ("Home", "Survival Rate"))
+page = st.sidebar.radio("Go to:", ("Home", "Survival Rate","Surgery Risk","Hospital Stay Duration","Total Hospitalization Cost"))
 
 if page == "Home":
-    st.title("Survival Rate Prediction")
+    st.title("Hospitalization & Surgery Insights")
     tab1, tab2 = st.tabs(["Description", "Machine Learning Model"])
     with tab1:
-        st.header("Project Overview")
-        
         st.write("""
-        Welcome to the Survival Rate platform, a comprehensive application designed to leverage 
-        the power of machine learning to predict survival rates based on various medical and physiological factors. 
-        This platform enables users to input specific details about their health, including vital signs, medical history, and other critical metrics.
+        Welcome to the **Survival Rate and Hospital Analytics Platform**, a comprehensive application designed to leverage the power of machine learning to provide actionable predictions related to patient health and hospital analytics. 
+        This platform enables users to input specific details about their health, including vital signs, medical history, and other critical metrics, to receive insights into survival likelihood, surgery risk, hospitalization costs, and stay durations.
         """)
 
-        st.write("### Purpose of the Project:")
-        st.write("""
-        The primary purpose of this platform is to identify and predict the survival likelihood of a patient that is in critical condition, helping users understand their health risks 
-        through a user-friendly interface. It focuses on several key areas:
-        
-        - **Personalization**: Each prediction provides patients with tailored insights based on their unique health data, offering a clear understanding of individual risk factors.
-        - **Early Detection**: By inputting their current health metrics, patients can identify high-risk areas early, enabling them to take proactive steps toward improving their health.
-        - **Continuous Health Tracking**: Patients can use the platform periodically to track changes in their survival rate predictions over time, providing motivation for consistent health monitoring and improvement.
-        """)
         st.markdown("---")
 
+        # Purpose of the Project
+        st.header("Purpose of the Project")
+        st.write("""
+        The primary purpose of this platform is to assist users in understanding their health risks and hospital needs through a user-friendly interface. It focuses on several key areas:  
+        """)
+
+        st.markdown("""
+        1. **Personalization**: Each prediction offers tailored insights based on individual health data, ensuring clear understanding of unique risk factors and hospital requirements.  
+        2. **Early Detection**: By inputting current health metrics, patients can identify high-risk areas early, enabling proactive steps toward health improvement or surgical preparedness.  
+        3. **Hospital Planning**: Provides accurate estimates for hospitalization costs and stay durations, helping users plan better for medical treatments and associated expenses.  
+        4. **Continuous Health Tracking**: Enables users to periodically monitor changes in survival rate, surgery risk, and other predictions, fostering consistent health tracking and improvement.  
+        """)
+        st.markdown("---")
         col1,col2 = st.columns(2)
 
         with col1:
             st.write("### Key Features:")
             st.write("""
-            - **User-friendly Interface**: Simple interface is provided but some of the details that are needed for prediction might requires further assist or information from medical professionals.
-            - **Comprehensive Health Feature Set**: Key input features include comorbidities (diabetes, cancer, dementia), functional disability level, physiological scores, vital signs (blood pressure, heart rate), and lab values (sodium, creatinine), ensuring robust and tailored predictions.
-            - **Actionable Insights**: The platform provides clear and understandable risk assessments, enabling users to recognize potential health risks and to take informed preventive measures.
-            - **Progress Tracking**: Users can track their survival rate predictions over time, seeing how changes in their health metrics impact their prognosis and receiving encouragement for healthy behavior changes.
-            - **High Accuracy Rate**: All machine learning models utilized in this platform achieve at least a **80% accuracy rate**, ensuring users receive reliable predictions regarding their health risks.
+            - **User-friendly Interface**: Simple and intuitive design for inputting health and hospital-related metrics, with guidance where medical expertise is required.  
+            - **Comprehensive Health Feature Set**: Input features include:  
+            - **Survival Rate Prediction**: Comorbidities (diabetes, cancer, dementia), functional disability level, physiological scores, vital signs (blood pressure, heart rate), and lab values (sodium, creatinine).  
+            - **Surgery Risk Assessment**: Health metrics, medical history, and physiological data for evaluating surgical risks.  
+            - **Hospital Stay Duration Prediction**: Estimate stay duration based on treatment plans, medical conditions, and historical data.  
+            - **Total Hospitalization Cost Prediction**: Factors in admission type, medical conditions, treatment plans, and hospital stay duration for precise cost estimation.  
+            - **Actionable Insights**: Provides clear, actionable health and hospital-related predictions, enabling users to take informed decisions about treatments and preventive measures.  
+            - **Progress Tracking**: Tracks survival rate predictions and other key metrics over time, allowing users to monitor health and financial planning progress.  
+            - **High Accuracy Models**: All machine learning models achieve at least an 80% accuracy rate, ensuring reliability and trustworthiness of predictions.  
             """)
         with col2:
             st.write("### How It Works:")
             st.write("""
-            1. **Data Input**: Users enter relevant data, including age, health conditions, lifestyle habits, and personal metrics, through an easy-to-navigate input form.
-            2. **Model Prediction**: The application employs advanced machine learning models to analyze the input data and predict the likelihood of survival. These models utilize extensive datasets to ensure accurate predictions.
-            3. **Interpret Results**: Users receive a clear assessment of their health risks, which they can use to make informed decisions regarding the patient.
+            1. **Data Input**: Users enter relevant data, including age, health conditions, lifestyle habits, and personal metrics, through an easy-to-navigate form.  
+            2. **Model Prediction**: The application employs advanced machine learning models to analyze input data and provide predictions for:  
+                - Survival rate likelihood  
+                - Surgery risk  
+                - Estimated hospital stay duration  
+                - Total hospitalization cost  
+            3. **Interpret Results**: Users receive clear, comprehensive assessments, enabling them to make informed decisions regarding their health, surgery preparedness, and hospital planning.  
             """)
         
         st.markdown("---")
@@ -102,18 +111,26 @@ if page == "Home":
             st.write(" ")
             st.write("**Precision**: The proportion of true positive predictions out of total positive predictions, assessing the model’s specificity.")
             st.latex(r"Precision = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}")
-
+            st.write(" ")
+            st.write("**AUC-ROC (Area Under the Receiver Operating Characteristic Curve)**: This metric provides a measure of model discrimination capability, with values closer to 1 indicating better performance.")
+            st.latex(r"AUC\text{-}ROC = \text{Area Under the ROC Curve}")
+            st.write(" ")
+            st.write("**MAE (Mean Absolute Error)**: Measures the average absolute difference between predicted and actual values, treating all errors equally.")
+            st.latex(r"MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|")
         with col2:
             st.write("**Recall**: The proportion of true positives identified by the model out of all actual positives, showing sensitivity.")
             st.latex(r"Recall = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}")
             st.write(" ")
             st.write("**F1-Score**: The harmonic mean of precision and recall, balancing both metrics.")
             st.latex(r"F1\text{-}Score = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}")
+            st.write(" ")
+            st.write("**RMSE (Root Mean Square Error)**: Measures the average magnitude of error, with higher sensitivity to large errors due to squaring.")
+            st.latex(r"RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}")
+            st.write(" ")
+            st.write("**R² (Coefficient of Determination)**: Indicates the proportion of variance in the target variable explained by the model.")
+            st.latex(r"R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}")
 
         st.write(" ")
-        # Create a new row for the AUC-ROC metric
-        st.write("**AUC-ROC (Area Under the Receiver Operating Characteristic Curve)**: This metric provides a measure of model discrimination capability, with values closer to 1 indicating better performance.")
-        st.latex(r"AUC\text{-}ROC = \text{Area Under the ROC Curve}")
         
         st.write("""
         ### Metric Functionality
@@ -121,29 +138,81 @@ if page == "Home":
         - **Precision** is useful when the cost of false positives is high, while **Recall** is crucial when false negatives are more costly.
         - **F1-Score** helps balance precision and recall in scenarios where both metrics are important.
         - **AUC-ROC** evaluates the model's ability to distinguish between classes, with a higher score indicating better model performance.
+        - **RMSE (Root Mean Square Error)** provides a measure of the average error magnitude, penalizing larger errors more heavily. It is sensitive to outliers and provides insights into the overall prediction accuracy.
+        - **MAE (Mean Absolute Error)** is a straightforward metric that calculates the average absolute difference between predicted and actual values, treating all errors equally and being less sensitive to outliers.
+        - **R² (Coefficient of Determination)** explains how much of the variance in the target variable is captured by the model, with values closer to 1 indicating better explanatory power.
         """)        
         st.write(" ")
         st.write("### Model's Metric Performance Comparison")
+        disease_tabs = st.tabs(["Survival Rate", "Surgery Risk", "Hospitalization Total Cost"])
         performance_data = {
             "Survival Rate": {
                 "XGBoost Accuracy": 0.81, "XGBoost Precision": 0.82, "XGBoost Recall": 0.81, "XGBoost F1-Score": 0.81, "XGBoost AUC-ROC": 0.873460972017673,
                 "Random Forest Accuracy": 0.81, "Random Forest Precision": 0.82, "Random Forest Recall": 0.81, "Random Forest F1-Score": 0.81, "Random Forest AUC-ROC": 0.8727771933515673
-            }
+            },
+            "Surgery Risk": {
+                "XGBoost Accuracy": 0.55, "XGBoost Precision": 0.47, "XGBoost Recall": 0.55, "XGBoost F1-Score": 0.43, "XGBoost AUC-ROC": 0.7796430189722033,
+                "Random Forest Accuracy": 0.56, "Random Forest Precision":0.45, "Random Forest Recall": 0.56, "Random Forest F1-Score": 0.40, "Random Forest AUC-ROC": 0.7806320849982206
+            },
+            "Hospitalization Total Cost": {
+                "XGBoost Accuracy": 0.67, "XGBoost Precision": 0.66, "XGBoost Recall": 0.67, "XGBoost F1-Score": 0.66, "XGBoost AUC-ROC": 0.9212253302924063,
+                "Random Forest Accuracy": 0.56, "Random Forest Precision":0.66, "Random Forest Recall": 0.66, "Random Forest F1-Score": 0.66, "Random Forest AUC-ROC": 0.9170619726801796,
+            },
         }
 
-        st.subheader("Survival Rate - Model Performance Comparison")
-        performance_df = pd.DataFrame({
-            "Model": ["XGBoost", "Random Forest"],
-            "Accuracy": [performance_data["Survival Rate"]["XGBoost Accuracy"], performance_data["Survival Rate"]["Random Forest Accuracy"]],
-            "Precision": [performance_data["Survival Rate"]["XGBoost Precision"], performance_data["Survival Rate"]["Random Forest Precision"]],
-            "Recall": [performance_data["Survival Rate"]["XGBoost Recall"], performance_data["Survival Rate"]["Random Forest Recall"]],
-            "F1-Score": [performance_data["Survival Rate"]["XGBoost F1-Score"], performance_data["Survival Rate"]["Random Forest F1-Score"]],
-            "AUC-ROC": [performance_data["Survival Rate"]["XGBoost AUC-ROC"], performance_data["Survival Rate"]["Random Forest AUC-ROC"]]
-        })
+        for i, disease in enumerate(performance_data.keys()):
+            with disease_tabs[i]:
+                st.subheader(f"{disease} - Model Performance Comparison")
+                # Extracting the model data for this specific disease
+                data = performance_data[disease]
+                # Creating a DataFrame for better readability
+                performance_df = pd.DataFrame({
+                    "Model": ["XGBoost", "Random Forest"],
+                    "Accuracy": [data["XGBoost Accuracy"], data["Random Forest Accuracy"]],
+                    "Precision": [data["XGBoost Precision"], data["Random Forest Precision"]],
+                    "Recall": [data["XGBoost Recall"], data["Random Forest Recall"]],
+                    "F1-Score": [data["XGBoost F1-Score"], data["Random Forest F1-Score"]],
+                    "AUC-ROC": [data["XGBoost AUC-ROC"], data["Random Forest AUC-ROC"]]
+                })
+                
+                st.table(performance_df)
+                st.write("**Best Model for Survival Rate Prediction:** XGBoost")
+                st.tabs(["Hospital Total Cost"])
+        performance_regression = { 
+            "Hospital Total Cost": {
+            "XGBoost Root Mean Squared Error (RMSE)": 0.5825122581235502, 
+            "XGBoost Mean Absolute Error (MAE)": 0.3424451851851852, 
+            "XGBoost R-squared (R²)": 0.9842049011823726,
+            "Random Forest Root Mean Squared Error (RMSE)": 0.5903727212532774, 
+            "Random Forest Mean Absolute Error (MAE)": 0.3468122222222222, 
+            "Random Forest R-squared (R²)": 0.9837757446090281
+        }
+    }
 
-        st.table(performance_df)
+        # Accessing metrics under "Hospital Total Cost"
+        hospital_cost_metrics = performance_regression["Hospital Total Cost"]
+
+        # Creating a DataFrame
+        performance_regression_df = pd.DataFrame({
+            "Model": ["XGBoost", "Random Forest"],
+            "Root Mean Squared Error (RMSE)": [
+            hospital_cost_metrics["XGBoost Root Mean Squared Error (RMSE)"], 
+            hospital_cost_metrics["Random Forest Root Mean Squared Error (RMSE)"]
+        ],
+        "Mean Absolute Error (MAE)": [
+            hospital_cost_metrics["XGBoost Mean Absolute Error (MAE)"], 
+            hospital_cost_metrics["Random Forest Mean Absolute Error (MAE)"]
+        ],
+        "R-squared (R²)": [
+            hospital_cost_metrics["XGBoost R-squared (R²)"], 
+            hospital_cost_metrics["Random Forest R-squared (R²)"]
+        ]
+    })
+
+        #    Displaying in Streamlit
+        st.table(performance_regression_df)
         st.write("**Best Model for Survival Rate Prediction:** XGBoost")
-            
+
 elif page == "Survival Rate":
     # Title and description
     st.title("Survival Rate Prediction")
