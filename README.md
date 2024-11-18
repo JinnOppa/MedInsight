@@ -85,7 +85,7 @@ To run the MedInsight web application locally on your machine, follow these step
 ### 1. **Clone the Repository**
 First, clone the repository to your local machine using Git. This will download the project files to your system:
 ```
-git clone https://github.com/your-repo-url
+git clone https://github.com/JinnOppa/TSDN-BoyWithLuv
 ```
 ### 2. **Navigate to the Project Directory**
 After cloning the repository, change your working directory to the project folder:
