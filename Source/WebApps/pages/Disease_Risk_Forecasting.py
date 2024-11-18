@@ -236,17 +236,7 @@ if page == "Home":
                         
                         This model is an ensemble of multiple decision trees, where each tree is trained on a subset of the data. It works by averaging the predictions of individual trees to reduce overfitting and increase accuracy. Random Forest is particularly effective in handling nonlinear relationships and reduces the risk of high variance in the model predictions.
                         """)
-        # st.write("""
-        # In this analysis, we used two machine learning models: **XGBoost** and **Random Forest**. These models were chosen due to their robustness in handling large datasets, 
-        # their ability to capture complex patterns, and their strong performance in classification tasks. 
-        
-        # **XGBoost (Extreme Gradient Boosting)**: This model is a gradient-boosting algorithm that builds an ensemble of weak decision trees to improve accuracy. 
-        # It optimizes model performance by minimizing the error using gradient descent techniques and handles both missing data and large-scale datasets efficiently.
-        
-        # **Random Forest**: This model is an ensemble of multiple decision trees, where each tree is trained on a subset of the data. It works by averaging the predictions of 
-        # individual trees to reduce overfitting and increase accuracy. Random Forest is particularly effective in handling nonlinear relationships and reduces the risk of high 
-        # variance in the model predictions.
-        # """)
+
         st.markdown("---")
         st.write("### Model Formulas and Structure")
         # Creating two columns for Key Features and How It Works

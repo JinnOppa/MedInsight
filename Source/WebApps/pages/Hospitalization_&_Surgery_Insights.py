@@ -407,7 +407,6 @@ elif page == "Surgery Risk":
             risk_level = "Unknown Risk Level"
             st.write(f"The predicted preoperative risk class is: {risk_level}")
 
-
 elif page == "Hospital Stay Duration":
     try:
         stay_model = joblib.load('Source/Prototype/patient_stay_cost/xgb_stayDuration.pkl')
