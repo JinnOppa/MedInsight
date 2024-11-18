@@ -141,6 +141,7 @@ skin_type_mapping = {
     'Type IV-VI': 1, 
     'Type III': 2
 }
+
 sunlight_exposure_type_mapping = {
     'High': 0, 
     'Low': 1, 
@@ -349,9 +350,15 @@ if page == "Home":
 
         
 elif page == "Heart Attack":
-    #ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease_rf_heart_attack.pkl')
-    #ha_model = joblib.load('Source/Prototype/disease/disease_rf_heart_attack.pkl')
-    ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_rf_heart_attack.pkl')
+    try:
+        ha_model = joblib.load('Source/Prototype/disease/disease_rf_heart_attack.pkl')
+    except FileNotFoundError:
+        try:
+            ha_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_rf_heart_attack.pkl')
+        except FileNotFoundError:
+            ha_model = None
+            print("Error: Model file not found in either path.")
+    
     # Page title and description
     st.title("Heart Attack Risk Prediction")
     st.write("Enter the following information to predict the risk of a heart attack.")
@@ -449,8 +456,19 @@ elif page == "Heart Attack":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Angina":
-    angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_angina.pkl')
-    #angina_model = joblib.load('Source/Prototype/disease/disease_xgb_angina.pkl')
+
+    try:
+        # Attempt to load the model from the first path
+        angina_model = joblib.load('Source/Prototype/disease/disease_xgb_angina.pkl')
+    except FileNotFoundError:
+        try:
+            # Attempt to load the model from the second path
+            angina_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_angina.pkl')
+        except FileNotFoundError:
+            # Handle the case where neither path is valid
+            angina_model = None
+            print("Error: Model file not found in either path.")
+
     # Page title and description
     st.title("Angina Risk Prediction")
     st.write("Enter the following information to predict the risk of Angina.")
@@ -550,8 +568,18 @@ elif page == "Angina":
             st.success(f"Prediction Result: {result}")
 
 elif page == "Stroke":
-    #stroke_model = joblib.load('Source/Prototype/disease/disease_xgb_stroke.pkl')
-    stroke_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_stroke.pkl')
+    try:
+        # Attempt to load the model from the first path
+        stroke_model = joblib.load('Source/Prototype/disease/disease_xgb_stroke.pkl')
+    except FileNotFoundError:
+        try:
+            # Attempt to load the model from the second path
+            stroke_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_stroke.pkl')
+        except FileNotFoundError:
+            # Handle the case where neither path is valid
+            stroke_model = None
+            print("Error: Model file not found in either path.")
+    
     # Page title and description
     st.title("Stroke Risk Prediction")
     st.write("Enter the following information to predict the risk of Stroke.")
@@ -645,8 +673,18 @@ elif page == "Stroke":
             st.success(f"Prediction Result: {result}")
             
 elif page == "Depressive Disorder":
-    #dd_model = joblib.load('Source/Prototype/disease/disease_xgb_depressive_disorder.pkl')
-    dd_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_depressive_disorder.pkl')
+    try:
+        # Attempt to load the model from the first path
+        dd_model = joblib.load('Source/Prototype/disease/disease_xgb_depressive_disorder.pkl')
+    except FileNotFoundError:
+        try:
+            # Attempt to load the model from the second path
+            dd_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_depressive_disorder.pkl')
+        except FileNotFoundError:
+            # Handle the case where neither path is valid
+            dd_model = None
+            print("Error: Model file not found in either path.")
+
     # Page title and description
     st.title("Depressive Disorder Risk Prediction")
     st.write("Enter the following information to predict the risk of Depressive Disorder.")
@@ -744,9 +782,19 @@ elif page == "Depressive Disorder":
             st.success(f"Prediction Result: {result}")
                      
 elif page == "Arthritis":
-    #arthritis_model = joblib.load('Source/Prototype/disease/disease_xgb_arthritis.pkl')
-    arthritis_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_arthritis.pkl')
-    
+    try:
+        # Attempt to load the model from the first path
+        arthritis_model = joblib.load('Source/Prototype/disease/disease_xgb_arthritis.pkl')
+    except FileNotFoundError:
+        try:
+            # Attempt to load the model from the second path
+            arthritis_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_arthritis.pkl')
+        except FileNotFoundError:
+            # Handle the case where neither path is valid
+            arthritis_model = None
+            print("Error: Model file not found in either path.")
+
+
     # Page title and description
     st.title("Arthritis Risk Prediction")
     st.write("Enter the following information to predict the risk of Arthritis.")
@@ -831,8 +879,18 @@ elif page == "Arthritis":
             st.success(f"Prediction Result: {result}")
             
 elif page == "Skin Cancer":
-    #sc_model = joblib.load('Source/Prototype/disease/disease_xgb_skin_cancer.pkl')
-    sc_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_skin_cancer.pkl')
+    try:
+        # Attempt to load the model from the first path
+        sc_model = joblib.load('Source/Prototype/disease/disease_xgb_skin_cancer.pkl')
+    except FileNotFoundError:
+        try:
+            # Attempt to load the model from the second path
+            sc_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\disease\\disease_xgb_skin_cancer.pkl')
+        except FileNotFoundError:
+            # Handle the case where neither path is valid
+            sc_model = None
+            print("Error: Model file not found in either path.")
+
     # Page title and description
     st.title("Skin Cancer Risk Prediction")
     st.write("Enter the following information to predict the risk of Skin Cancer.")

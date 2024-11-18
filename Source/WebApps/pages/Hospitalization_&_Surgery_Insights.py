@@ -4,10 +4,11 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import joblib
+import math
 
 # Load the saved model
-with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\survival_rate\\xgb_survival_rate.pkl", "rb") as file:  # Replace 'saved_model.pkl' with your actual model filename
-    model = pickle.load(file)
+# with open("C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\survival_rate\\xgb_survival_rate.pkl", "rb") as file:  # Replace 'saved_model.pkl' with your actual model filename
+#     model = pickle.load(file)
 
 page = st.sidebar.radio("Go to:", ("Home", "Survival Rate","Surgery Risk","Hospital Stay Duration","Total Hospitalization Cost"))
 
@@ -216,6 +217,15 @@ if page == "Home":
         st.write("**Best Model for Prediction:** XGBoost")
 
 elif page == "Survival Rate":
+    try:
+        sr_model = joblib.load('Source/Prototype/survival_rate/xgb_survival_rate.pkl')
+    except FileNotFoundError:
+        try:
+            sr_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\survival_rate\\xgb_survival_rate.pkl')
+        except FileNotFoundError:
+            sr_model = None
+            print("Error: Model file not found in either path.")
+
     # Title and description
     st.title("Survival Rate Prediction")
     st.write("Enter the details below to predict the survival rate based on patient data.")
@@ -269,15 +279,27 @@ elif page == "Survival Rate":
 
     # Prediction
     if st.button("Predict Survival Rate"):
-        prediction = model.predict(input_data)
+        prediction = sr_model.predict(input_data)
         survival_rate = prediction[0]
     
         st.subheader("Predicted Survival Rate")
-        st.write(f"The predicted survival rate is: {'High' if survival_rate > 0.5 else 'Low'}")
+        if survival_rate > 0.5:
+            st.success("The predicted survival rate is: High")
+        else:
+            st.error("The predicted survival rate is: Low")
 
 elif page == "Surgery Risk":
     # Load your pre-trained model (assuming the model is saved in a .pkl file)
-    model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\surgery_risk\\xgb_surgery_risk.pkl')
+    # model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\surgery_risk\\xgb_surgery_risk.pkl')
+
+    try:
+        surisk_model = joblib.load('Source/Prototype/surgery_risk/xgb_surgery_risk.pkl')
+    except FileNotFoundError:
+        try:
+            surisk_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\surgery_risk\\xgb_surgery_risk.pkl')
+        except FileNotFoundError:
+            surisk_model = None
+            print("Error: Model file not found in either path.")
 
     # Function to encode categorical columns
     def encode_categorical_data(input_data):
@@ -334,7 +356,7 @@ elif page == "Surgery Risk":
         input_data = encode_categorical_data(input_data)
     
         # Make prediction
-        prediction = model.predict(input_data)
+        prediction = surisk_model.predict(input_data)
     
         return prediction[0]
 
@@ -368,29 +390,40 @@ elif page == "Surgery Risk":
                                             surgery_name, surgery_type, surgical_specialty, anesthesia_type, surgery_duration,
                                             blood_loss_category, blood_transfusions, stay_duration, room_type, pain_score,
                                             rehab_assessment_score)
-    
-        # Display the corresponding risk level
+        # Determine risk level and display with appropriate visualization
         if prediction == 0:
             risk_level = "Low Risk Surgery"
+            st.success(f"The predicted preoperative risk class is: {risk_level}")
         elif prediction == 1:
             risk_level = "Moderate Risk Surgery"
+            st.info(f"The predicted preoperative risk class is: {risk_level}")
         elif prediction == 2:
             risk_level = "High Risk Surgery"
+            st.warning(f"The predicted preoperative risk class is: {risk_level}")
         elif prediction == 3:
             risk_level = "Very High Risk Surgery"
+            st.error(f"The predicted preoperative risk class is: {risk_level}")
         else:
             risk_level = "Unknown Risk Level"
+            st.write(f"The predicted preoperative risk class is: {risk_level}")
 
-        # Show the result
-        st.write(f"The predicted preoperative risk class is: {risk_level}")
 
 elif page == "Hospital Stay Duration":
+    try:
+        stay_model = joblib.load('Source/Prototype/patient_stay_cost/xgb_stayDuration.pkl')
+    except FileNotFoundError:
+        try:
+            stay_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\xgb_stayDuration.pkl')
+        except FileNotFoundError:
+            stay_model = None
+            print("Error: Model file not found in either path.")
 
-    model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\xgb_stayDuration.pkl')  # Ensure the path is correct
+
+    # model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\xgb_stayDuration.pkl')  # Ensure the path is correct
 
     # Function to predict hospital stay duration
     def predict_stay_duration(input_data):
-        prediction = model.predict([input_data])
+        prediction = stay_model.predict([input_data])
         return prediction[0]
 
     # Streamlit interface   
@@ -434,16 +467,51 @@ elif page == "Hospital Stay Duration":
             total_cost
         ]
 
+    # # Button to predict the hospital stay duration
+    # if st.button("Predict Stay Duration"):
+    #     input_data = encode_inputs(insurance_type, surgery_name, surgery_duration, room_type, medical_equipment_count, ward_cost, surgery_cost, medication_cost, total_cost)
+    #     prediction = predict_stay_duration(input_data)
+    #     st.write(f"Predicted Hospital Stay Duration: {prediction} days")
     # Button to predict the hospital stay duration
     if st.button("Predict Stay Duration"):
-        input_data = encode_inputs(insurance_type, surgery_name, surgery_duration, room_type, medical_equipment_count, ward_cost, surgery_cost, medication_cost, total_cost)
+        # Encode the inputs for prediction
+        input_data = encode_inputs(
+            insurance_type, surgery_name, surgery_duration, room_type, 
+            medical_equipment_count, ward_cost, surgery_cost, 
+            medication_cost, total_cost
+        )
+        
+        # Get the prediction from the model
         prediction = predict_stay_duration(input_data)
-        st.write(f"Predicted Hospital Stay Duration: {prediction} days")
+        
+        # Round up the prediction to the nearest integer
+        rounded_prediction = math.ceil(prediction)
+        
+        # Enhanced visualization
+        st.subheader("Predicted Hospital Stay Duration")
+        if rounded_prediction <= 3:
+            st.success(f"The predicted hospital stay duration is: {rounded_prediction} days (Short Stay)")
+        elif 4 <= rounded_prediction <= 7:
+            st.info(f"The predicted hospital stay duration is: {rounded_prediction} days (Moderate Stay)")
+        elif 8 <= rounded_prediction <= 14:
+            st.warning(f"The predicted hospital stay duration is: {rounded_prediction} days (Long Stay)")
+        else:
+            st.error(f"The predicted hospital stay duration is: {rounded_prediction} days (Very Long Stay)")
 
 elif page == "Total Hospitalization Cost":
 
 # Load the saved model (adjust the path to where your model is saved)
-    model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\patient_xgb_cost.pkl')
+    try:
+        cost_model = joblib.load('Source/Prototype/patient_stay_cost/patient_xgb_cost.pkl')
+    except FileNotFoundError:
+        try:
+            cost_model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\patient_xgb_cost.pkl')
+        except FileNotFoundError:
+            cost_model = None
+            print("Error: Model file not found in either path.")
+
+
+    # model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\patient_xgb_cost.pkl')
 
 # Initialize LabelEncoders for categorical features
     gender_encoder = LabelEncoder()
@@ -489,7 +557,7 @@ elif page == "Total Hospitalization Cost":
         features['room_type'] = room_type_encoder.transform([features['room_type']])[0]
 
     # Making prediction
-        predicted_class_index = model.predict([features])[0]
+        predicted_class_index = cost_model.predict([features])[0]
 
     # Reverse mapping to get the human-readable class label
         predicted_class_label = reverse_total_cost_class_mapping[predicted_class_index]
@@ -532,12 +600,22 @@ elif page == "Total Hospitalization Cost":
     }
 
     # Button to trigger prediction
-    if st.button('Predict Cost Class'):
+    if st.button('Predict Cost Class', key='predict_cost_button'):
+
         # Convert input to pandas DataFrame
         input_df = pd.DataFrame([input_features])
-    
+
         # Prediction
         predicted_class = predict_cost_class(input_df.iloc[0])
-    
-        st.write(f'The predicted cost class is: {predicted_class}')
 
+        # Enhanced visualization
+        if predicted_class == "Very Low":
+            st.success(f"The predicted cost class is: {predicted_class} ")
+        elif predicted_class == "Low":
+            st.info(f"The predicted cost class is: {predicted_class} ")
+        elif predicted_class == "Medium":
+            st.warning(f"The predicted cost class is: {predicted_class} ")
+        elif predicted_class == "High":
+            st.error(f"The predicted cost class is: {predicted_class} ")
+        elif predicted_class =="Very High":
+            st.error(f"The predicted cost class is: {predicted_class} ")

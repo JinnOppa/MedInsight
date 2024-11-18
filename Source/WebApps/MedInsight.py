@@ -1,7 +1,7 @@
 # WebApp.py
 import streamlit as st
 
-st.set_page_config(page_title="ML Project Web App", layout="wide")
+st.set_page_config(page_title="MedInsight Web Application", layout="wide")
 
 # Title and introductory text
 st.title("MedInsight")
