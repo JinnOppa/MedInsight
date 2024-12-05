@@ -731,33 +731,33 @@ elif page == "Total Hospitalization Cost":
     input_data['room_type'] = input_data['room_type'].map(room_type_mapping)
     
 
-    # Predict button
-    st.markdown("---")
-    if st.button("Predict Cost Class"):
-        # Perform prediction using the model
-        cost_prediction = cost_model.predict(input_data)
-        
-        # Extract the predicted class number
-        predicted_class_number = cost_prediction[0]
-        
-        # Display prediction result with custom styling
-        if predicted_class_number in [3, 4]:  # High or Very High classes
-            st.error(f"Prediction Result: Class {predicted_class_number}")
-        else:
-            st.success(f"Prediction Result: Class {predicted_class_number}")
-
     # # Predict button
     # st.markdown("---")
     # if st.button("Predict Cost Class"):
     #     # Perform prediction using the model
     #     cost_prediction = cost_model.predict(input_data)
         
-    #     # Reverse mapping from numerical output to cost class label
-    #     reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
-    #     predicted_class_label = reverse_total_cost_class_mapping.get(cost_prediction[0], "Unknown")
+    #     # Extract the predicted class number
+    #     predicted_class_number = cost_prediction[0]
         
     #     # Display prediction result with custom styling
-    #     if predicted_class_label in ['High', 'Very High']:
-    #         st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+    #     if predicted_class_number in [3, 4]:  # High or Very High classes
+    #         st.error(f"Prediction Result: Class {predicted_class_number}")
     #     else:
-    #         st.success(f"Prediction Result: {predicted_class_label} Cost Class")
+    #         st.success(f"Prediction Result: Class {predicted_class_number}")
+
+    # Predict button
+    st.markdown("---")
+    if st.button("Predict Cost Class"):
+        # Perform prediction using the model
+        cost_prediction = cost_model.predict(input_data)
+        
+        # Reverse mapping from numerical output to cost class label
+        reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
+        predicted_class_label = reverse_total_cost_class_mapping.get(cost_prediction[0], "Unknown")
+        
+        # Display prediction result with custom styling
+        if predicted_class_label in ['High', 'Very High']:
+            st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+        else:
+            st.success(f"Prediction Result: {predicted_class_label} Cost Class")
