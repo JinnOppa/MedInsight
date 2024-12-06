@@ -2,7 +2,7 @@ import streamlit as st
 # import pickle
 import pandas as pd
 import numpy as np
-# from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder
 import joblib
 import math
 
@@ -288,67 +288,94 @@ elif page == "Survival Rate":
             sr_model = None
             print("Error: Model file not found in either path.")
 
-    # # Title and description
-    # st.title("Survival Rate Prediction")
-    # st.write("Enter the details below to predict the survival rate based on patient data.")
+    # Title and description
+    st.title("Survival Rate Prediction")
+    st.write("Enter the details below to predict the survival rate based on patient data.")
 
-    # # Input fields
-    # age_years = st.number_input("Age (years)", min_value=0, max_value=120, value=30)
-    # gender = st.selectbox("Gender", options=["Male", "Female"])
-    # num_comorbidities = st.number_input("Number of Comorbidities", min_value=0, max_value=10, value=0)
-    # has_diabetes = st.selectbox("Has Diabetes", options=["Yes", "No"])
-    # has_dementia = st.selectbox("Has Dementia", options=["Yes", "No"])
-    # cancer_status = st.selectbox("Cancer Status", options=["Yes", "No"])
-    # functional_disability_level = st.slider("Functional Disability Level (0-10)", min_value=0, max_value=10, value=5)
-    # coma_score = st.slider("Coma Score (3-15)", min_value=3, max_value=15, value=10)
-    # support_physiology_score = st.slider("Support Physiology Score", min_value=0, max_value=20, value=10)
-    # apache_score = st.slider("APACHE Score", min_value=0, max_value=100, value=50)
-    # mean_arterial_bp = st.number_input("Mean Arterial Blood Pressure (mmHg)", min_value=0.0, max_value=200.0, value=80.0)
-    # heart_rate = st.number_input("Heart Rate (bpm)", min_value=0.0, max_value=200.0, value=70.0)
-    # respiratory_rate = st.number_input("Respiratory Rate (breaths/min)", min_value=0.0, max_value=60.0, value=20.0)
-    # body_temperature_celsius = st.number_input("Body Temperature (°C)", min_value=30.0, max_value=45.0, value=37.0)
-    # serum_sodium = st.number_input("Serum Sodium (mmol/L)", min_value=100.0, max_value=200.0, value=140.0)
-    # serum_creatinine = st.number_input("Serum Creatinine (mg/dL)", min_value=0.0, max_value=20.0, value=1.0)
-    # do_not_resuscitate_status = st.selectbox("Do Not Resuscitate Status", options=["Yes", "No"])
-
-    # # Convert categorical values to numeric encoding if necessary
-    # gender = 1 if gender == "Male" else 0
-    # has_diabetes = 1 if has_diabetes == "Yes" else 0
-    # has_dementia = 1 if has_dementia == "Yes" else 0
-    # cancer_status = 1 if cancer_status == "Yes" else 0
-    # do_not_resuscitate_status = 1 if do_not_resuscitate_status == "Yes" else 0
-
-    # # Create input DataFrame
-    # input_data = pd.DataFrame({
-    #     'age_years': [age_years],
-    #     'gender': [gender],
-    #     'num_comorbidities': [num_comorbidities],
-    #     'has_diabetes': [has_diabetes],
-    #     'has_dementia': [has_dementia],
-    #     'cancer_status': [cancer_status],
-    #     'functional_disability_level': [functional_disability_level],
-    #     'coma_score': [coma_score],
-    #     'support_physiology_score': [support_physiology_score],
-    #     'apache_score': [apache_score],
-    #     'mean_arterial_bp': [mean_arterial_bp],
-    #     'heart_rate': [heart_rate],
-    #     'respiratory_rate': [respiratory_rate],
-    #     'body_temperature_celsius': [body_temperature_celsius],
-    #     'serum_sodium': [serum_sodium],
-    #     'serum_creatinine': [serum_creatinine],
-    #     'do_not_resuscitate_status': [do_not_resuscitate_status]
-    # })
-
-    # # Prediction
-    # if st.button("Predict Survival Rate"):
-    #     prediction = sr_model.predict(input_data)
-    #     survival_rate = prediction[0]
+    # Input fields
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        age_years = st.number_input("Age (years)", min_value=0, max_value=120, value=30)
+        gender = st.selectbox("Gender", options=["Male", "Female"])
+        
+    st.subheader("Medical History")
+    with st.expander("Enter Medical History"):
+        num_comorbidities = st.number_input("Number of Comorbidities", min_value=0, max_value=10, value=0)
+        st.caption("Multiple illnesses or diseases that occur in the same patient at the same time")
+        has_diabetes = st.selectbox("Has Diabetes", options=["Yes", "No"])
+        has_dementia = st.selectbox("Has Dementia", options=["Yes", "No"])
+        cancer_status = st.selectbox("Cancer Status", options=["Yes", "No"])
     
-    #     st.subheader("Predicted Survival Rate")
-    #     if survival_rate > 0.5:
-    #         st.success("The predicted survival rate is: High")
-    #     else:
-    #         st.error("The predicted survival rate is: Low")
+    # Clinical Scores
+    st.subheader("Clinical Scores")
+    with st.expander("Enter Clinical Scores Details"):
+        
+        functional_disability_level = st.slider("# **Functional Disability Level (0-10)**", min_value=0, max_value=10, value=5)
+        st.caption("Measures the degree of impairment in daily activities, where 0 means no disability and 10 indicates total dependency.")
+        
+        coma_score = st.slider("Coma Score (3-15)", min_value=3, max_value=15, value=10)
+        st.caption("The Glasgow Coma Scale (GCS) evaluates a person's level of consciousness, where 3 indicates deep coma or death, and 15 indicates fully awake.")
+        
+        support_physiology_score = st.slider("Support Physiology Score", min_value=0, max_value=20, value=10)
+        st.caption("Assesses the severity of organ dysfunction. Higher scores indicate greater physiological derangement.")
+        
+        apache_score = st.slider("APACHE ( Acute Physiology and Chronic Health Evaluation) Score", min_value=0, max_value=100, value=50)
+        st.caption("Predicts mortality risk based on several physiological parameters. Scores range from 0 to 100, with higher scores indicating a greater risk.")
+    
+    st.subheader("Clinical Measurements")
+    with st.expander("Enter Clinical Measurements History Details"):
+        mean_arterial_bp = st.number_input("Mean Arterial Blood Pressure (mmHg)", min_value=0.0, max_value=200.0, value=80.0)
+        heart_rate = st.number_input("Heart Rate (bpm)", min_value=0.0, max_value=200.0, value=70.0)
+        respiratory_rate = st.number_input("Respiratory Rate (breaths/min)", min_value=0.0, max_value=60.0, value=20.0)
+        body_temperature_celsius = st.number_input("Body Temperature (°C)", min_value=30.0, max_value=45.0, value=37.0)
+    
+    st.subheader("Clinical Lab Results")
+    with st.expander("Enter Clinical Lab Results"):
+        serum_sodium = st.number_input("Serum Sodium (mmol/L)", min_value=100.0, max_value=200.0, value=140.0)
+        serum_creatinine = st.number_input("Serum Creatinine (mg/dL)", min_value=0.0, max_value=20.0, value=1.0)
+    
+    st.subheader("Legal Directives")
+    with st.expander("Enter Legal Directives Details"):
+        do_not_resuscitate_status = st.selectbox("Do Not Resuscitate Status", options=["Yes", "No"])
+
+    # Convert categorical values to numeric encoding if necessary
+    gender = 1 if gender == "Male" else 0
+    has_diabetes = 1 if has_diabetes == "Yes" else 0
+    has_dementia = 1 if has_dementia == "Yes" else 0
+    cancer_status = 1 if cancer_status == "Yes" else 0
+    do_not_resuscitate_status = 1 if do_not_resuscitate_status == "Yes" else 0
+
+    # Create input DataFrame
+    input_data = pd.DataFrame({
+        'age_years': [age_years],
+        'gender': [gender],
+        'num_comorbidities': [num_comorbidities],
+        'has_diabetes': [has_diabetes],
+        'has_dementia': [has_dementia],
+        'cancer_status': [cancer_status],
+        'functional_disability_level': [functional_disability_level],
+        'coma_score': [coma_score],
+        'support_physiology_score': [support_physiology_score],
+        'apache_score': [apache_score],
+        'mean_arterial_bp': [mean_arterial_bp],
+        'heart_rate': [heart_rate],
+        'respiratory_rate': [respiratory_rate],
+        'body_temperature_celsius': [body_temperature_celsius],
+        'serum_sodium': [serum_sodium],
+        'serum_creatinine': [serum_creatinine],
+        'do_not_resuscitate_status': [do_not_resuscitate_status]
+    })
+
+    # Prediction
+    if st.button("Predict Survival Rate"):
+        prediction = sr_model.predict(input_data)
+        survival_rate = prediction[0]
+    
+        st.subheader("Predicted Survival Rate")
+        if survival_rate > 0.5:
+            st.success("The predicted survival rate is: High")
+        else:
+            st.error("The predicted survival rate is: Low")
 
 elif page == "Surgery Risk":
     # Load your pre-trained model (assuming the model is saved in a .pkl file)
@@ -363,111 +390,122 @@ elif page == "Surgery Risk":
             surisk_model = None
             print("Error: Model file not found in either path.")
 
-    # # Function to encode categorical columns
-    # def encode_categorical_data(input_data):
-    #     # Define LabelEncoder for each categorical column
-    #     label_encoders = {
-    #         'gender': LabelEncoder(),
-    #         'age_group': LabelEncoder(),
-    #         'smoking_status': LabelEncoder(),
-    #         'e_cigarette_usage': LabelEncoder(),
-    #         'alcohol_consumption_rate': LabelEncoder(),
-    #         'surgery_name': LabelEncoder(),
-    #         'surgery_type': LabelEncoder(),
-    #         'surgical_specialty': LabelEncoder(),
-    #         'anesthesia_type': LabelEncoder(),
-    #         'blood_loss_category': LabelEncoder(),
-    #         'blood_transfusions': LabelEncoder(),
-    #         'stay_duration': LabelEncoder(),
-    #         'room_type': LabelEncoder()
-    #     }
+    # Function to encode categorical columns
+    def encode_categorical_data(input_data):
+        # Define LabelEncoder for each categorical column
+        label_encoders = {
+            'gender': LabelEncoder(),
+            'age_group': LabelEncoder(),
+            'smoking_status': LabelEncoder(),
+            'e_cigarette_usage': LabelEncoder(),
+            'alcohol_consumption_rate': LabelEncoder(),
+            'surgery_name': LabelEncoder(),
+            'surgery_type': LabelEncoder(),
+            'surgical_specialty': LabelEncoder(),
+            'anesthesia_type': LabelEncoder(),
+            'blood_loss_category': LabelEncoder(),
+            'blood_transfusions': LabelEncoder(),
+            'stay_duration': LabelEncoder(),
+            'room_type': LabelEncoder()
+        }
 
-    #     # Fit and transform each categorical column
-    #     for column, le in label_encoders.items():
-    #         if column in input_data.columns:
-    #             input_data[column] = le.fit_transform(input_data[column])
+        # Fit and transform each categorical column
+        for column, le in label_encoders.items():
+            if column in input_data.columns:
+                input_data[column] = le.fit_transform(input_data[column])
 
-    #     return input_data
+        return input_data
 
-    # # Function to make predictions
-    # def predict_preoperative_risk(gender, age_group, smoking_status, e_cigarette_usage, alcohol_consumption_rate, 
-    #                             surgery_name, surgery_type, surgical_specialty, anesthesia_type, surgery_duration, 
-    #                             blood_loss_category, blood_transfusions, stay_duration, room_type, pain_score, 
-    #                             rehab_assessment_score):
-    #     # Prepare the data in the format the model expects
-    #     input_data = pd.DataFrame({
-    #         'gender': [gender],
-    #         'age_group': [age_group],
-    #         'smoking_status': [smoking_status],
-    #         'e_cigarette_usage': [e_cigarette_usage],
-    #         'alcohol_consumption_rate': [alcohol_consumption_rate],
-    #         'surgery_name': [surgery_name],
-    #         'surgery_type': [surgery_type],
-    #         'surgical_specialty': [surgical_specialty],
-    #         'anesthesia_type': [anesthesia_type],
-    #         'surgery_duration': [surgery_duration],
-    #         'blood_loss_category': [blood_loss_category],
-    #         'blood_transfusions': [blood_transfusions],
-    #         'stay_duration': [stay_duration],
-    #         'room_type': [room_type],
-    #         'pain_score': [pain_score],
-    #         'rehab_assessment_score': [rehab_assessment_score]
-    #     })
+    # Function to make predictions
+    def predict_preoperative_risk(gender, age_group, smoking_status, e_cigarette_usage, alcohol_consumption_rate, 
+                                surgery_name, surgery_type, surgical_specialty, anesthesia_type, surgery_duration, 
+                                blood_loss_category, blood_transfusions, stay_duration, room_type, pain_score, 
+                                rehab_assessment_score):
+        # Prepare the data in the format the model expects
+        input_data = pd.DataFrame({
+            'gender': [gender],
+            'age_group': [age_group],
+            'smoking_status': [smoking_status],
+            'e_cigarette_usage': [e_cigarette_usage],
+            'alcohol_consumption_rate': [alcohol_consumption_rate],
+            'surgery_name': [surgery_name],
+            'surgery_type': [surgery_type],
+            'surgical_specialty': [surgical_specialty],
+            'anesthesia_type': [anesthesia_type],
+            'surgery_duration': [surgery_duration],
+            'blood_loss_category': [blood_loss_category],
+            'blood_transfusions': [blood_transfusions],
+            'stay_duration': [stay_duration],
+            'room_type': [room_type],
+            'pain_score': [pain_score],
+            'rehab_assessment_score': [rehab_assessment_score]
+        })
     
-    #     # Encode categorical data
-    #     input_data = encode_categorical_data(input_data)
+        # Encode categorical data
+        input_data = encode_categorical_data(input_data)
     
-    #     # Make prediction
-    #     prediction = surisk_model.predict(input_data)
+        # Make prediction
+        prediction = surisk_model.predict(input_data)
     
-    #     return prediction[0]
+        return prediction[0]
 
-    # # Streamlit UI elements
-    # st.title('Preoperative Risk Prediction')
+    # Streamlit UI elements
+    st.title('Preoperative Risk Prediction')
 
-    # # User Inputs
-    # gender = st.selectbox('Gender', ['Male', 'Female'])
-    # age_group = st.selectbox('Age Group', ['<20', '20-40', '40-60', '60+'])
-    # smoking_status = st.selectbox('Smoking Status', ['Non-Smoker', 'Smoker'])
-    # e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
-    # alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Low', 'Moderate', 'High', 'None'])
-    # surgery_name = st.selectbox('Surgery Name', ['Cataract Surgery', 'Appendectomy', 'Spinal Fusion', 'Knee Replacement', 
-    #                                             'Gallbladder Removal', 'Breast Cancer Surgery', 'Liver Transplant', 
-    #                                             'Heart Bypass', 'Hip Replacement', 'Hernia Repair'])
-    # surgery_type = st.selectbox('Surgery Type', ['Minor', 'Major'])
-    # surgical_specialty = st.selectbox('Surgical Specialty', ['General', 'Orthopedic', 'Oncology', 'Transplant', 'Cardiothoracic'])
-    # anesthesia_type = st.selectbox('Anesthesia Type', ['General', 'Local', 'Regional'])
-    # surgery_duration = st.number_input('Surgery Duration (in minutes)', min_value=0)
-    # blood_loss_category = st.selectbox('Blood Loss Category', ['Low', 'Medium', 'High'])
-    # blood_transfusions = st.selectbox('Blood Transfusions', ['Yes', 'No'])
-    # stay_duration = st.selectbox('Stay Duration', ['<1 Day', '1-3 Days', '3-7 Days', '>7 Days'])
-    # room_type = st.selectbox('Room Type', ['Standard', 'VIP', 'ICU'])
-    # pain_score = st.slider('Pain Score (1-10)', min_value=1, max_value=10)
-    # rehab_assessment_score = st.slider('Rehabilitation Assessment Score (1-10)', min_value=1, max_value=10)
+    # User Inputs
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        gender = st.selectbox('Gender', ['Male', 'Female'])
+        age_group = st.selectbox('Age Group', ['<20', '20-40', '40-60', '60+'])
+        
+    st.subheader("Health & Lifestyle")
+    with st.expander("Enter Health and Lifestyle Details"):
+        smoking_status = st.selectbox('Smoking Status', ['Non-Smoker', 'Smoker'])
+        e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
+        alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Low', 'Moderate', 'High', 'None'])    
+            
+    st.subheader("Surgery Details")
+    with st.expander("Enter Surgery Information"):
+        surgery_name = st.selectbox('Surgery Name', ['Cataract Surgery', 'Appendectomy', 'Spinal Fusion', 'Knee Replacement', 
+                                                'Gallbladder Removal', 'Breast Cancer Surgery', 'Liver Transplant', 
+                                                'Heart Bypass', 'Hip Replacement', 'Hernia Repair'])
+        surgery_type = st.selectbox('Surgery Type', ['Minor', 'Major'])
+        surgical_specialty = st.selectbox('Surgical Specialty', ['General', 'Orthopedic', 'Oncology', 'Transplant', 'Cardiothoracic'])
+        anesthesia_type = st.selectbox('Anesthesia Type', ['General', 'Local', 'Regional'])
+        
+    st.subheader("Surgery Conditions")
+    with st.expander("Enter Surgery Conditions"):
+        surgery_duration = st.number_input('Surgery Duration (in minutes)', min_value=0)
+        blood_loss_category = st.selectbox('Blood Loss Category', ['Low', 'Medium', 'High'])
+        blood_transfusions = st.selectbox('Blood Transfusions', ['Yes', 'No'])
+        stay_duration = st.selectbox('Estimated Stay Duration', ['<1 Day', '1-3 Days', '3-7 Days', '>7 Days'])
+        room_type = st.selectbox('Ward Type', ['Standard', 'VIP', 'ICU'])
+        pain_score = st.slider('Estimated Pain Score (1-10)', min_value=1, max_value=10)
+        rehab_assessment_score = st.slider('Rehabilitation Assessment Score (1-10)', min_value=1, max_value=10)
 
-    # # Prediction button
-    # if st.button('Predict Preoperative Risk'):
-    #     # Get prediction from the model
-    #     prediction = predict_preoperative_risk(gender, age_group, smoking_status, e_cigarette_usage, alcohol_consumption_rate,
-    #                                         surgery_name, surgery_type, surgical_specialty, anesthesia_type, surgery_duration,
-    #                                         blood_loss_category, blood_transfusions, stay_duration, room_type, pain_score,
-    #                                         rehab_assessment_score)
-    #     # Determine risk level and display with appropriate visualization
-    #     if prediction == 0:
-    #         risk_level = "Low Risk Surgery"
-    #         st.success(f"The predicted preoperative risk class is: {risk_level}")
-    #     elif prediction == 1:
-    #         risk_level = "Moderate Risk Surgery"
-    #         st.info(f"The predicted preoperative risk class is: {risk_level}")
-    #     elif prediction == 2:
-    #         risk_level = "High Risk Surgery"
-    #         st.warning(f"The predicted preoperative risk class is: {risk_level}")
-    #     elif prediction == 3:
-    #         risk_level = "Very High Risk Surgery"
-    #         st.error(f"The predicted preoperative risk class is: {risk_level}")
-    #     else:
-    #         risk_level = "Unknown Risk Level"
-    #         st.write(f"The predicted preoperative risk class is: {risk_level}")
+    # Prediction button
+    if st.button('Predict Preoperative Risk'):
+        # Get prediction from the model
+        prediction = predict_preoperative_risk(gender, age_group, smoking_status, e_cigarette_usage, alcohol_consumption_rate,
+                                            surgery_name, surgery_type, surgical_specialty, anesthesia_type, surgery_duration,
+                                            blood_loss_category, blood_transfusions, stay_duration, room_type, pain_score,
+                                            rehab_assessment_score)
+        # Determine risk level and display with appropriate visualization
+        if prediction == 0:
+            risk_level = "Low Risk Surgery"
+            st.success(f"The predicted preoperative risk class is: {risk_level}")
+        elif prediction == 1:
+            risk_level = "Moderate Risk Surgery"
+            st.info(f"The predicted preoperative risk class is: {risk_level}")
+        elif prediction == 2:
+            risk_level = "High Risk Surgery"
+            st.warning(f"The predicted preoperative risk class is: {risk_level}")
+        elif prediction == 3:
+            risk_level = "Very High Risk Surgery"
+            st.error(f"The predicted preoperative risk class is: {risk_level}")
+        else:
+            risk_level = "Unknown Risk Level"
+            st.write(f"The predicted preoperative risk class is: {risk_level}")
 
 elif page == "Hospital Stay Duration":
     try:
@@ -489,24 +527,33 @@ elif page == "Hospital Stay Duration":
 
     # Streamlit interface   
     st.title("Hospital Stay Duration Prediction")
+    st.write("This app predicts the hospital admission duration classification based on various features.")
 
     # Input fields for each feature
-    insurance_type = st.selectbox("Insurance Type", ["Private", "Social Security Agency", "Self-Pay"])
-    surgery_name = st.selectbox("Surgery Name", [
+    st.subheader("Surgery Information")
+    with st.expander("Enter Surgery Details"):
+        surgery_name = st.selectbox("Surgery Name", [
         "Gallbladder Removal", "Breast Cancer Surgery", "Appendectomy",
         "Hip Replacement", "Cataract Surgery", "Hernia Repair", 
         "Knee Replacement", "Liver Transplant", "Heart Bypass", "Spinal Fusion"
-    ])
-    surgery_duration = st.number_input("Surgery Duration (in hours)", min_value=1, max_value=24, value=2)
-    room_type = st.selectbox("Room Type", ["Regular Ward", "ICU", "VIP Ward", "Private Ward"])
+        ])
+        surgery_duration = st.number_input("Surgery Duration (in hours)", min_value=1, max_value=24, value=2)
+        
+    st.subheader("Admission Information")
+    with st.expander("Enter Admission Details"):
+        insurance_type = st.selectbox("Insurance Type", ["Private", "Social Security Agency", "Self-Pay"])
+        room_type = st.selectbox("Room Type", ["Regular Ward", "ICU", "VIP Ward", "Private Ward"])
+        medical_equipment_count = st.number_input("Medical Equipment Count", min_value=0, max_value=100, value=5)
+        
+    st.subheader("Hospital Cost Breakdown")
+    with st.expander("Enter Financial Overview Information"):     
+        ward_cost = st.number_input("Ward Cost (in currency)", min_value=0, value=1000)
+        surgery_cost = st.number_input("Surgery Cost (in currency)", min_value=0, value=5000)
+        medication_cost = st.number_input("Medication Cost (in currency)", min_value=0, value=100)
+        total_cost = st.number_input("Total Cost (in currency)", min_value=0, value=7000)
+    
 
-    # Numeric inputs
-    medical_equipment_count = st.number_input("Medical Equipment Count", min_value=0, max_value=100, value=5)
-    ward_cost = st.number_input("Ward Cost (in currency)", min_value=0, value=1000)
-    surgery_cost = st.number_input("Surgery Cost (in currency)", min_value=0, value=5000)
-    medication_cost = st.number_input("Medication Cost (in currency)", min_value=0, value=100)
-    total_cost = st.number_input("Total Cost (in currency)", min_value=0, value=7000)
-
+    
     # Function to encode inputs to match the model's expected input format
     def encode_inputs(insurance_type, surgery_name, surgery_duration, room_type, medical_equipment_count, ward_cost, surgery_cost, medication_cost, total_cost):
         # Encoding categorical variables as needed
@@ -681,6 +728,9 @@ elif page == "Total Hospitalization Cost":
 #         elif predicted_class =="Very High":
 #             st.error(f"The predicted cost class is: {predicted_class} ")
 
+    st.title('Hospital Cost Prediction')
+
+    st.write("This app predicts the hospital cost classification based on various features.")
     # Collapsible input sections
     st.subheader("Personal Details")
     with st.expander("Enter Personal Information"):
@@ -701,11 +751,10 @@ elif page == "Total Hospitalization Cost":
             'Gallbladder Removal', 'Breast Cancer Surgery','Appendectomy', 'Hip Replacement', 'Cataract Surgery', 'Hernia Repair' ,'Knee Replacement', 'Liver Transplant', 'Heart Bypass' , 'Spinal Fusion'])
 
     st.subheader("Admission Details")
-    with st.expander("Enter Screening and Vaccination Details"):
+    with st.expander("Enter Hospital Admission Details"):
         room_type = st.selectbox('Ward Type', ['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
         admission_duration = st.number_input('Estimated Patient Stay Duration (Days)', min_value=0, max_value=600, value=1)
         equipment_count = st.number_input('Medical Equipment Count Used', min_value=0, max_value=50, value=1)
-
 
     # Create DataFrame for model input
     input_data = pd.DataFrame({
@@ -729,22 +778,6 @@ elif page == "Total Hospitalization Cost":
     input_data['alcohol_consumption_rate'] = input_data['alcohol_consumption_rate'].map(alcohol_consumption_rate_mapping)
     input_data['surgery_name'] = input_data['surgery_name'].map(surgery_name_mapping)
     input_data['room_type'] = input_data['room_type'].map(room_type_mapping)
-    
-
-    # # Predict button
-    # st.markdown("---")
-    # if st.button("Predict Cost Class"):
-    #     # Perform prediction using the model
-    #     cost_prediction = cost_model.predict(input_data)
-        
-    #     # Extract the predicted class number
-    #     predicted_class_number = cost_prediction[0]
-        
-    #     # Display prediction result with custom styling
-    #     if predicted_class_number in [3, 4]:  # High or Very High classes
-    #         st.error(f"Prediction Result: Class {predicted_class_number}")
-    #     else:
-    #         st.success(f"Prediction Result: Class {predicted_class_number}")
 
     # Predict button
     st.markdown("---")
@@ -756,8 +789,27 @@ elif page == "Total Hospitalization Cost":
         reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
         predicted_class_label = reverse_total_cost_class_mapping.get(cost_prediction[0], "Unknown")
         
+        price_ranges = {
+            "Very Low": "< 6k",
+            "Low": "6k - 13k",
+            "Medium": "13k - 22k",
+            "High": "22k - 26k",
+            "Very High": "> 26k"
+            }
+        # Get the price range for the predicted class
+        price_range = price_ranges.get(predicted_class_label, "Unavailable")
         # Display prediction result with custom styling
         if predicted_class_label in ['High', 'Very High']:
             st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+            st.error(f"Estimated Cost Range: {price_range}")
         else:
             st.success(f"Prediction Result: {predicted_class_label} Cost Class")
+            st.success(f"Estimated Cost Range: {price_range}")
+        # Display the corresponding price range
+        # st.success(f"Price Range: {price_range}")
+        
+        # # Display prediction result with custom styling
+        # if predicted_class_label in ['High', 'Very High']:
+        #     st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+        # else:
+        #     st.success(f"Prediction Result: {predicted_class_label} Cost Class")
