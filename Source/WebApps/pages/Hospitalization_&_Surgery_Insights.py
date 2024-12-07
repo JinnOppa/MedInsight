@@ -1,5 +1,5 @@
 import streamlit as st
-import pickle
+# import pickle
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -11,6 +11,68 @@ import math
 #     model = pickle.load(file)
 
 page = st.sidebar.radio("Go to:", ("Home", "Survival Rate","Surgery Risk","Hospital Stay Duration","Total Hospitalization Cost"))
+
+gender_mapping = {
+    'Male': 0, 
+    'Female': 1
+}
+
+insurance_type_mapping= {
+    'Private': 0, 
+    'Social Security Agency': 1, 
+    'Self-Pay': 2
+}
+
+smoking_status_mapping = {
+    'Never': 0, 
+    'Current': 1, 
+    'Former': 2
+}
+
+e_cigarette_usage_mapping = {
+    False: 0,
+    True: 1
+}
+
+alcohol_consumption_rate_mapping = {
+    'Occasional': 0, 
+    'None': 1, 
+    'Heavy': 2, 
+    'Moderate': 3
+}
+
+surgery_name_mapping = {
+    'Gallbladder Removal': 0, 
+    'Breast Cancer Surgery': 1, 
+    'Appendectomy' : 2,
+    'Hip Replacement': 3, 
+    'Cataract Surgery' : 4, 
+    'Hernia Repair' : 5,
+    'Knee Replacement' : 6, 
+    'Liver Transplant': 7, 
+    'Heart Bypass' : 8,
+    'Spinal Fusion': 9
+}
+
+surgery_type_mapping = {
+    'Minor': 0, 
+    'Major' : 1
+}
+
+room_type_mapping = {
+    'Regular Ward' : 0, 
+    'ICU': 1, 
+    'VIP Ward': 2, 
+    'Private Ward': 3
+}
+
+total_cost_class_mapping = {
+    'Very Low': 0, 
+    'Low': 1, 
+    'Medium' : 2, 
+    'High': 3, 
+    'Very High': 4
+}
 
 if page == "Home":
     st.title("Hospitalization & Surgery Insights")
@@ -231,23 +293,50 @@ elif page == "Survival Rate":
     st.write("Enter the details below to predict the survival rate based on patient data.")
 
     # Input fields
-    age_years = st.number_input("Age (years)", min_value=0, max_value=120, value=30)
-    gender = st.selectbox("Gender", options=["Male", "Female"])
-    num_comorbidities = st.number_input("Number of Comorbidities", min_value=0, max_value=10, value=0)
-    has_diabetes = st.selectbox("Has Diabetes", options=["Yes", "No"])
-    has_dementia = st.selectbox("Has Dementia", options=["Yes", "No"])
-    cancer_status = st.selectbox("Cancer Status", options=["Yes", "No"])
-    functional_disability_level = st.slider("Functional Disability Level (0-10)", min_value=0, max_value=10, value=5)
-    coma_score = st.slider("Coma Score (3-15)", min_value=3, max_value=15, value=10)
-    support_physiology_score = st.slider("Support Physiology Score", min_value=0, max_value=20, value=10)
-    apache_score = st.slider("APACHE Score", min_value=0, max_value=100, value=50)
-    mean_arterial_bp = st.number_input("Mean Arterial Blood Pressure (mmHg)", min_value=0.0, max_value=200.0, value=80.0)
-    heart_rate = st.number_input("Heart Rate (bpm)", min_value=0.0, max_value=200.0, value=70.0)
-    respiratory_rate = st.number_input("Respiratory Rate (breaths/min)", min_value=0.0, max_value=60.0, value=20.0)
-    body_temperature_celsius = st.number_input("Body Temperature (°C)", min_value=30.0, max_value=45.0, value=37.0)
-    serum_sodium = st.number_input("Serum Sodium (mmol/L)", min_value=100.0, max_value=200.0, value=140.0)
-    serum_creatinine = st.number_input("Serum Creatinine (mg/dL)", min_value=0.0, max_value=20.0, value=1.0)
-    do_not_resuscitate_status = st.selectbox("Do Not Resuscitate Status", options=["Yes", "No"])
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        age_years = st.number_input("Age (years)", min_value=0, max_value=120, value=30)
+        gender = st.selectbox("Gender", options=["Male", "Female"])
+        
+    st.subheader("Medical History")
+    with st.expander("Enter Medical History"):
+        num_comorbidities = st.number_input("Number of Comorbidities", min_value=0, max_value=10, value=0)
+        st.caption("Multiple illnesses or diseases that occur in the same patient at the same time")
+        has_diabetes = st.selectbox("Has Diabetes", options=["Yes", "No"])
+        has_dementia = st.selectbox("Has Dementia", options=["Yes", "No"])
+        cancer_status = st.selectbox("Cancer Status", options=["Yes", "No"])
+    
+    # Clinical Scores
+    st.subheader("Clinical Scores")
+    with st.expander("Enter Clinical Scores Details"):
+        
+        functional_disability_level = st.slider("# **Functional Disability Level (0-10)**", min_value=0, max_value=10, value=5)
+        st.caption("Measures the degree of impairment in daily activities, where 0 means no disability and 10 indicates total dependency.")
+        
+        coma_score = st.slider("Coma Score (3-15)", min_value=3, max_value=15, value=10)
+        st.caption("The Glasgow Coma Scale (GCS) evaluates a person's level of consciousness, where 3 indicates deep coma or death, and 15 indicates fully awake.")
+        
+        support_physiology_score = st.slider("Support Physiology Score", min_value=0, max_value=20, value=10)
+        st.caption("Assesses the severity of organ dysfunction. Higher scores indicate greater physiological derangement.")
+        
+        apache_score = st.slider("APACHE ( Acute Physiology and Chronic Health Evaluation) Score", min_value=0, max_value=100, value=50)
+        st.caption("Predicts mortality risk based on several physiological parameters. Scores range from 0 to 100, with higher scores indicating a greater risk.")
+    
+    st.subheader("Clinical Measurements")
+    with st.expander("Enter Clinical Measurements History Details"):
+        mean_arterial_bp = st.number_input("Mean Arterial Blood Pressure (mmHg)", min_value=0.0, max_value=200.0, value=80.0)
+        heart_rate = st.number_input("Heart Rate (bpm)", min_value=0.0, max_value=200.0, value=70.0)
+        respiratory_rate = st.number_input("Respiratory Rate (breaths/min)", min_value=0.0, max_value=60.0, value=20.0)
+        body_temperature_celsius = st.number_input("Body Temperature (°C)", min_value=30.0, max_value=45.0, value=37.0)
+    
+    st.subheader("Clinical Lab Results")
+    with st.expander("Enter Clinical Lab Results"):
+        serum_sodium = st.number_input("Serum Sodium (mmol/L)", min_value=100.0, max_value=200.0, value=140.0)
+        serum_creatinine = st.number_input("Serum Creatinine (mg/dL)", min_value=0.0, max_value=20.0, value=1.0)
+    
+    st.subheader("Legal Directives")
+    with st.expander("Enter Legal Directives Details"):
+        do_not_resuscitate_status = st.selectbox("Do Not Resuscitate Status", options=["Yes", "No"])
 
     # Convert categorical values to numeric encoding if necessary
     gender = 1 if gender == "Male" else 0
@@ -364,24 +453,35 @@ elif page == "Surgery Risk":
     st.title('Preoperative Risk Prediction')
 
     # User Inputs
-    gender = st.selectbox('Gender', ['Male', 'Female'])
-    age_group = st.selectbox('Age Group', ['<20', '20-40', '40-60', '60+'])
-    smoking_status = st.selectbox('Smoking Status', ['Non-Smoker', 'Smoker'])
-    e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
-    alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Low', 'Moderate', 'High', 'None'])
-    surgery_name = st.selectbox('Surgery Name', ['Cataract Surgery', 'Appendectomy', 'Spinal Fusion', 'Knee Replacement', 
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        gender = st.selectbox('Gender', ['Male', 'Female'])
+        age_group = st.selectbox('Age Group', ['<20', '20-40', '40-60', '60+'])
+        
+    st.subheader("Health & Lifestyle")
+    with st.expander("Enter Health and Lifestyle Details"):
+        smoking_status = st.selectbox('Smoking Status', ['Non-Smoker', 'Smoker'])
+        e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
+        alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Low', 'Moderate', 'High', 'None'])    
+            
+    st.subheader("Surgery Details")
+    with st.expander("Enter Surgery Information"):
+        surgery_name = st.selectbox('Surgery Name', ['Cataract Surgery', 'Appendectomy', 'Spinal Fusion', 'Knee Replacement', 
                                                 'Gallbladder Removal', 'Breast Cancer Surgery', 'Liver Transplant', 
                                                 'Heart Bypass', 'Hip Replacement', 'Hernia Repair'])
-    surgery_type = st.selectbox('Surgery Type', ['Minor', 'Major'])
-    surgical_specialty = st.selectbox('Surgical Specialty', ['General', 'Orthopedic', 'Oncology', 'Transplant', 'Cardiothoracic'])
-    anesthesia_type = st.selectbox('Anesthesia Type', ['General', 'Local', 'Regional'])
-    surgery_duration = st.number_input('Surgery Duration (in minutes)', min_value=0)
-    blood_loss_category = st.selectbox('Blood Loss Category', ['Low', 'Medium', 'High'])
-    blood_transfusions = st.selectbox('Blood Transfusions', ['Yes', 'No'])
-    stay_duration = st.selectbox('Stay Duration', ['<1 Day', '1-3 Days', '3-7 Days', '>7 Days'])
-    room_type = st.selectbox('Room Type', ['Standard', 'VIP', 'ICU'])
-    pain_score = st.slider('Pain Score (1-10)', min_value=1, max_value=10)
-    rehab_assessment_score = st.slider('Rehabilitation Assessment Score (1-10)', min_value=1, max_value=10)
+        surgery_type = st.selectbox('Surgery Type', ['Minor', 'Major'])
+        surgical_specialty = st.selectbox('Surgical Specialty', ['General', 'Orthopedic', 'Oncology', 'Transplant', 'Cardiothoracic'])
+        anesthesia_type = st.selectbox('Anesthesia Type', ['General', 'Local', 'Regional'])
+        
+    st.subheader("Surgery Conditions")
+    with st.expander("Enter Surgery Conditions"):
+        surgery_duration = st.number_input('Surgery Duration (in minutes)', min_value=0)
+        blood_loss_category = st.selectbox('Blood Loss Category', ['Low', 'Medium', 'High'])
+        blood_transfusions = st.selectbox('Blood Transfusions', ['Yes', 'No'])
+        stay_duration = st.selectbox('Estimated Stay Duration', ['<1 Day', '1-3 Days', '3-7 Days', '>7 Days'])
+        room_type = st.selectbox('Ward Type', ['Standard', 'VIP', 'ICU'])
+        pain_score = st.slider('Estimated Pain Score (1-10)', min_value=1, max_value=10)
+        rehab_assessment_score = st.slider('Rehabilitation Assessment Score (1-10)', min_value=1, max_value=10)
 
     # Prediction button
     if st.button('Predict Preoperative Risk'):
@@ -427,24 +527,33 @@ elif page == "Hospital Stay Duration":
 
     # Streamlit interface   
     st.title("Hospital Stay Duration Prediction")
+    st.write("This app predicts the hospital admission duration classification based on various features.")
 
     # Input fields for each feature
-    insurance_type = st.selectbox("Insurance Type", ["Private", "Social Security Agency", "Self-Pay"])
-    surgery_name = st.selectbox("Surgery Name", [
+    st.subheader("Surgery Information")
+    with st.expander("Enter Surgery Details"):
+        surgery_name = st.selectbox("Surgery Name", [
         "Gallbladder Removal", "Breast Cancer Surgery", "Appendectomy",
         "Hip Replacement", "Cataract Surgery", "Hernia Repair", 
         "Knee Replacement", "Liver Transplant", "Heart Bypass", "Spinal Fusion"
-    ])
-    surgery_duration = st.number_input("Surgery Duration (in hours)", min_value=1, max_value=24, value=2)
-    room_type = st.selectbox("Room Type", ["Regular Ward", "ICU", "VIP Ward", "Private Ward"])
+        ])
+        surgery_duration = st.number_input("Surgery Duration (in hours)", min_value=1, max_value=24, value=2)
+        
+    st.subheader("Admission Information")
+    with st.expander("Enter Admission Details"):
+        insurance_type = st.selectbox("Insurance Type", ["Private", "Social Security Agency", "Self-Pay"])
+        room_type = st.selectbox("Room Type", ["Regular Ward", "ICU", "VIP Ward", "Private Ward"])
+        medical_equipment_count = st.number_input("Medical Equipment Count", min_value=0, max_value=100, value=5)
+        
+    st.subheader("Hospital Cost Breakdown")
+    with st.expander("Enter Financial Overview Information"):     
+        ward_cost = st.number_input("Ward Cost (in currency)", min_value=0, value=1000)
+        surgery_cost = st.number_input("Surgery Cost (in currency)", min_value=0, value=5000)
+        medication_cost = st.number_input("Medication Cost (in currency)", min_value=0, value=100)
+        total_cost = st.number_input("Total Cost (in currency)", min_value=0, value=7000)
+    
 
-    # Numeric inputs
-    medical_equipment_count = st.number_input("Medical Equipment Count", min_value=0, max_value=100, value=5)
-    ward_cost = st.number_input("Ward Cost (in currency)", min_value=0, value=1000)
-    surgery_cost = st.number_input("Surgery Cost (in currency)", min_value=0, value=5000)
-    medication_cost = st.number_input("Medication Cost (in currency)", min_value=0, value=100)
-    total_cost = st.number_input("Total Cost (in currency)", min_value=0, value=7000)
-
+    
     # Function to encode inputs to match the model's expected input format
     def encode_inputs(insurance_type, surgery_name, surgery_duration, room_type, medical_equipment_count, ward_cost, surgery_cost, medication_cost, total_cost):
         # Encoding categorical variables as needed
@@ -509,112 +618,198 @@ elif page == "Total Hospitalization Cost":
             cost_model = None
             print("Error: Model file not found in either path.")
 
-
+        
     # model = joblib.load('C:\\Users\\Republic Of Gamers\\OneDrive\\Documents\\GitHub\\TSDN-BoyWithLuv\\Source\\Prototype\\patient_stay_cost\\patient_xgb_cost.pkl')
 
-# Initialize LabelEncoders for categorical features
-    gender_encoder = LabelEncoder()
-    insurance_type_encoder = LabelEncoder()
-    smoking_status_encoder = LabelEncoder()
-    e_cigarette_usage_encoder = LabelEncoder()
-    alcohol_consumption_rate_encoder = LabelEncoder()
-    surgery_name_encoder = LabelEncoder()
-    room_type_encoder = LabelEncoder()
+# # Initialize LabelEncoders for categorical features
+#     gender_encoder = LabelEncoder()
+#     insurance_type_encoder = LabelEncoder()
+#     smoking_status_encoder = LabelEncoder()
+#     e_cigarette_usage_encoder = LabelEncoder()
+#     alcohol_consumption_rate_encoder = LabelEncoder()
+#     surgery_name_encoder = LabelEncoder()
+#     room_type_encoder = LabelEncoder()
 
-# Fit the label encoders with the unique values
-    gender_encoder.fit(['Male', 'Female'])
-    insurance_type_encoder.fit(['Private', 'Social Security Agency', 'Self-Pay'])
-    smoking_status_encoder.fit(['Never', 'Current', 'Former'])
-    e_cigarette_usage_encoder.fit([False, True])
-    alcohol_consumption_rate_encoder.fit(['Occasional', 'None', 'Heavy', 'Moderate'])
-    surgery_name_encoder.fit(['Gallbladder Removal', 'Breast Cancer Surgery', 'Appendectomy',
-                            'Hip Replacement', 'Cataract Surgery', 'Hernia Repair',
-                            'Knee Replacement', 'Liver Transplant', 'Heart Bypass', 'Spinal Fusion'])
-    room_type_encoder.fit(['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
+# # Fit the label encoders with the unique values
+#     gender_encoder.fit(['Male', 'Female'])
+#     insurance_type_encoder.fit(['Private', 'Social Security Agency', 'Self-Pay'])
+#     smoking_status_encoder.fit(['Never', 'Current', 'Former'])
+#     e_cigarette_usage_encoder.fit([False, True])
+#     alcohol_consumption_rate_encoder.fit(['Occasional', 'None', 'Heavy', 'Moderate'])
+#     surgery_name_encoder.fit(['Gallbladder Removal', 'Breast Cancer Surgery', 'Appendectomy',
+#                             'Hip Replacement', 'Cataract Surgery', 'Hernia Repair',
+#                             'Knee Replacement', 'Liver Transplant', 'Heart Bypass', 'Spinal Fusion'])
+#     room_type_encoder.fit(['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
 
-    # Mapping for cost class
-    total_cost_class_mapping = {
-        'Very Low': 0, 
-        'Low': 1, 
-        'Medium' : 2, 
-        'High': 3, 
-        'Very High': 4
-    }
+#     # Mapping for cost class
+#     total_cost_class_mapping = {
+#         'Very Low': 0, 
+#         'Low': 1, 
+#         'Medium' : 2, 
+#         'High': 3, 
+#         'Very High': 4
+#     }
 
-# Reverse mapping for the output class
-    reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
+# # Reverse mapping for the output class
+#     reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
 
-# Function to predict the cost class
-    def predict_cost_class(features):
-        # Encoding categorical features
-        features['gender'] = gender_encoder.transform([features['gender']])[0]
-        features['insurance_type'] = insurance_type_encoder.transform([features['insurance_type']])[0]
-        features['smoking_status'] = smoking_status_encoder.transform([features['smoking_status']])[0]
-        features['e_cigarette_usage'] = e_cigarette_usage_encoder.transform([features['e_cigarette_usage']])[0]
-        features['alcohol_consumption_rate'] = alcohol_consumption_rate_encoder.transform([features['alcohol_consumption_rate']])[0]
-        features['surgery_name'] = surgery_name_encoder.transform([features['surgery_name']])[0]
-        features['room_type'] = room_type_encoder.transform([features['room_type']])[0]
+# # Function to predict the cost class
+#     def predict_cost_class(features):
+#         # Encoding categorical features
+#         features['gender'] = gender_encoder.transform([features['gender']])[0]
+#         features['insurance_type'] = insurance_type_encoder.transform([features['insurance_type']])[0]
+#         features['smoking_status'] = smoking_status_encoder.transform([features['smoking_status']])[0]
+#         features['e_cigarette_usage'] = e_cigarette_usage_encoder.transform([features['e_cigarette_usage']])[0]
+#         features['alcohol_consumption_rate'] = alcohol_consumption_rate_encoder.transform([features['alcohol_consumption_rate']])[0]
+#         features['surgery_name'] = surgery_name_encoder.transform([features['surgery_name']])[0]
+#         features['room_type'] = room_type_encoder.transform([features['room_type']])[0]
 
-    # Making prediction
-        predicted_class_index = cost_model.predict([features])[0]
+#     # Making prediction
+#         predicted_class_index = cost_model.predict([features])[0]
 
-    # Reverse mapping to get the human-readable class label
-        predicted_class_label = reverse_total_cost_class_mapping[predicted_class_index]
-        return predicted_class_label
+#     # Reverse mapping to get the human-readable class label
+#         predicted_class_label = reverse_total_cost_class_mapping[predicted_class_index]
+#         return predicted_class_label
 
-# Streamlit Interface
+# # Streamlit Interface
+#     st.title('Hospital Cost Prediction')
+
+#     st.write("This app predicts the hospital cost classification based on various features.")
+
+# # Input Fields
+#     gender = st.selectbox('Gender', ['Male', 'Female'])
+#     age = st.number_input('Age', min_value=0, max_value=120, value=30)
+#     insurance_type = st.selectbox('Insurance Type', ['Private', 'Social Security Agency', 'Self-Pay'])
+#     smoking_status = st.selectbox('Smoking Status', ['Never', 'Current', 'Former'])
+#     e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
+#     alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Occasional', 'None', 'Heavy', 'Moderate'])
+#     previous_admission_count = st.number_input('Previous Admission Count', min_value=0, value=0)
+#     surgery_name = st.selectbox('Surgery Name', ['Gallbladder Removal', 'Breast Cancer Surgery', 'Appendectomy',
+#                                                 'Hip Replacement', 'Cataract Surgery', 'Hernia Repair',
+#                                                 'Knee Replacement', 'Liver Transplant', 'Heart Bypass',
+#                                                 'Spinal Fusion'])
+#     room_type = st.selectbox('Room Type', ['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
+#     stay_duration = st.number_input('Stay Duration (in days)', min_value=1, value=3)
+#     medical_equipment_count = st.number_input('Medical Equipment Count', min_value=0, value=1)
+
+# # Creating a dictionary of input values
+#     input_features = {
+#         'gender': gender,
+#         'age': age,
+#         'insurance_type': insurance_type,
+#         'smoking_status': smoking_status,
+#         'e_cigarette_usage': e_cigarette_usage,
+#         'alcohol_consumption_rate': alcohol_consumption_rate,
+#         'previous_admission_count': previous_admission_count,
+#         'surgery_name': surgery_name,
+#         'room_type': room_type,
+#         'stay_duration': stay_duration,
+#         'medical_equipment_count': medical_equipment_count
+#     }
+
+#     # Button to trigger prediction
+#     if st.button('Predict Cost Class', key='predict_cost_button'):
+
+#         # Convert input to pandas DataFrame
+#         input_df = pd.DataFrame([input_features])
+
+#         # Prediction
+#         predicted_class = predict_cost_class(input_df.iloc[0])
+
+#         # Enhanced visualization
+#         if predicted_class == "Very Low":
+#             st.success(f"The predicted cost class is: {predicted_class} ")
+#         elif predicted_class == "Low":
+#             st.info(f"The predicted cost class is: {predicted_class} ")
+#         elif predicted_class == "Medium":
+#             st.warning(f"The predicted cost class is: {predicted_class} ")
+#         elif predicted_class == "High":
+#             st.error(f"The predicted cost class is: {predicted_class} ")
+#         elif predicted_class =="Very High":
+#             st.error(f"The predicted cost class is: {predicted_class} ")
+
     st.title('Hospital Cost Prediction')
 
     st.write("This app predicts the hospital cost classification based on various features.")
+    # Collapsible input sections
+    st.subheader("Personal Details")
+    with st.expander("Enter Personal Information"):
+        gender = st.selectbox('Gender', ['Male', 'Female'])
+        age = st.number_input('Age', min_value=0, max_value=150, value=30)
+        insurance_type = st.selectbox('Insurance Type', ['Private', 'Social Security Agency', 'Self-Pay'])
 
-# Input Fields
-    gender = st.selectbox('Gender', ['Male', 'Female'])
-    age = st.number_input('Age', min_value=0, max_value=120, value=30)
-    insurance_type = st.selectbox('Insurance Type', ['Private', 'Social Security Agency', 'Self-Pay'])
-    smoking_status = st.selectbox('Smoking Status', ['Never', 'Current', 'Former'])
-    e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
-    alcohol_consumption_rate = st.selectbox('Alcohol Consumption Rate', ['Occasional', 'None', 'Heavy', 'Moderate'])
-    previous_admission_count = st.number_input('Previous Admission Count', min_value=0, value=0)
-    surgery_name = st.selectbox('Surgery Name', ['Gallbladder Removal', 'Breast Cancer Surgery', 'Appendectomy',
-                                                'Hip Replacement', 'Cataract Surgery', 'Hernia Repair',
-                                                'Knee Replacement', 'Liver Transplant', 'Heart Bypass',
-                                                'Spinal Fusion'])
-    room_type = st.selectbox('Room Type', ['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
-    stay_duration = st.number_input('Stay Duration (in days)', min_value=1, value=3)
-    medical_equipment_count = st.number_input('Medical Equipment Count', min_value=0, value=1)
+    st.subheader("Health & Lifestyle")
+    with st.expander("Enter Health and Lifestyle Details"):
+        smoker_status = st.selectbox('Smoker Status', ['Never', 'Current', 'Former'])
+        e_cigarette_usage = st.selectbox('E-Cigarette Usage', ['Yes', 'No'])
+        alcohol_consumption = st.selectbox('Alcohol Consumption', ['Occasional', 'None', 'Moderate', 'Heavy'])
 
-# Creating a dictionary of input values
-    input_features = {
-        'gender': gender,
-        'age': age,
-        'insurance_type': insurance_type,
-        'smoking_status': smoking_status,
-        'e_cigarette_usage': e_cigarette_usage,
-        'alcohol_consumption_rate': alcohol_consumption_rate,
-        'previous_admission_count': previous_admission_count,
-        'surgery_name': surgery_name,
-        'room_type': room_type,
-        'stay_duration': stay_duration,
-        'medical_equipment_count': medical_equipment_count
-    }
+    st.subheader("Medical History")
+    with st.expander("Enter Medical History"):
+        previous_admision = st.number_input('Previous Admission Count', min_value=0, max_value=150, value=1)
+        surgery_name = st.selectbox('Surgery Name', [
+            'Gallbladder Removal', 'Breast Cancer Surgery','Appendectomy', 'Hip Replacement', 'Cataract Surgery', 'Hernia Repair' ,'Knee Replacement', 'Liver Transplant', 'Heart Bypass' , 'Spinal Fusion'])
 
-    # Button to trigger prediction
-    if st.button('Predict Cost Class', key='predict_cost_button'):
+    st.subheader("Admission Details")
+    with st.expander("Enter Hospital Admission Details"):
+        room_type = st.selectbox('Ward Type', ['Regular Ward', 'ICU', 'VIP Ward', 'Private Ward'])
+        admission_duration = st.number_input('Estimated Patient Stay Duration (Days)', min_value=0, max_value=600, value=1)
+        equipment_count = st.number_input('Medical Equipment Count Used', min_value=0, max_value=50, value=1)
 
-        # Convert input to pandas DataFrame
-        input_df = pd.DataFrame([input_features])
+    # Create DataFrame for model input
+    input_data = pd.DataFrame({
+        'gender': [gender],
+        'age': [age],
+        'insurance_type': [insurance_type],
+        'smoking_status': [smoker_status],
+        'e_cigarette_usage': [e_cigarette_usage],
+        'alcohol_consumption_rate': [alcohol_consumption],
+        'previous_admission_count': [previous_admision],
+        'surgery_name': [surgery_name],
+        'room_type': [room_type],
+        'stay_duration': [admission_duration],
+        'medical_equipment_count': [equipment_count]
+    })
 
-        # Prediction
-        predicted_class = predict_cost_class(input_df.iloc[0])
+    input_data['gender'] = input_data['gender'].map(gender_mapping)
+    input_data['insurance_type'] = input_data['insurance_type'].map(insurance_type_mapping)
+    input_data['smoking_status'] = input_data['smoking_status'].map(smoking_status_mapping)
+    input_data['e_cigarette_usage'] = input_data['e_cigarette_usage'].map(e_cigarette_usage_mapping)
+    input_data['alcohol_consumption_rate'] = input_data['alcohol_consumption_rate'].map(alcohol_consumption_rate_mapping)
+    input_data['surgery_name'] = input_data['surgery_name'].map(surgery_name_mapping)
+    input_data['room_type'] = input_data['room_type'].map(room_type_mapping)
 
-        # Enhanced visualization
-        if predicted_class == "Very Low":
-            st.success(f"The predicted cost class is: {predicted_class} ")
-        elif predicted_class == "Low":
-            st.info(f"The predicted cost class is: {predicted_class} ")
-        elif predicted_class == "Medium":
-            st.warning(f"The predicted cost class is: {predicted_class} ")
-        elif predicted_class == "High":
-            st.error(f"The predicted cost class is: {predicted_class} ")
-        elif predicted_class =="Very High":
-            st.error(f"The predicted cost class is: {predicted_class} ")
+    # Predict button
+    st.markdown("---")
+    if st.button("Predict Cost Class"):
+        # Perform prediction using the model
+        cost_prediction = cost_model.predict(input_data)
+        
+        # Reverse mapping from numerical output to cost class label
+        reverse_total_cost_class_mapping = {v: k for k, v in total_cost_class_mapping.items()}
+        predicted_class_label = reverse_total_cost_class_mapping.get(cost_prediction[0], "Unknown")
+        
+        price_ranges = {
+            "Very Low": "< 6k",
+            "Low": "6k - 13k",
+            "Medium": "13k - 22k",
+            "High": "22k - 26k",
+            "Very High": "> 26k"
+            }
+        # Get the price range for the predicted class
+        price_range = price_ranges.get(predicted_class_label, "Unavailable")
+        # Display prediction result with custom styling
+        if predicted_class_label in ['High', 'Very High']:
+            st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+            st.error(f"Estimated Cost Range: {price_range}")
+        else:
+            st.success(f"Prediction Result: {predicted_class_label} Cost Class")
+            st.success(f"Estimated Cost Range: {price_range}")
+        # Display the corresponding price range
+        # st.success(f"Price Range: {price_range}")
+        
+        # # Display prediction result with custom styling
+        # if predicted_class_label in ['High', 'Very High']:
+        #     st.error(f"Prediction Result: {predicted_class_label} Cost Class")
+        # else:
+        #     st.success(f"Prediction Result: {predicted_class_label} Cost Class")
